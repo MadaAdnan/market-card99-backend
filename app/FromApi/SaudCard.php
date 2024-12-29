@@ -1,0 +1,118 @@
+<?php
+
+namespace App\FromApi;
+
+use App\Enums\BillStatusEnum;
+use App\Jobs\OneSignalJob;
+use App\Models\Bill;
+use App\Rpositories\BillRepository;
+
+class SaudCard implements PayByApi
+{
+
+    private $setting;
+
+    public function __construct($setting)
+    {
+        $this->setting = $setting;
+    }
+
+    public function buyFromApiFree(Bill $bill, $id = null): Bill
+    {
+        $code = $bill->id_bill;
+        if ($code == null) {
+            return $bill;
+        }
+
+        $url = 'https://api.saud-card.com/client/api/newOrder/' . $bill->product->codes_api['saud'] . '/params?qty=' . $bill->amount . '&order_uuid=' . $code . '&playerId=' . $bill->customer_id;
+        $token = $this->setting->apis['saud'];
+        $bill->save();
+
+
+        try {
+            $response = \Http::withHeaders([
+                'api-token' => $token
+            ])->get($url);
+
+            sleep(1);
+            if ($response->successful() && \Str::lower($response->json('status')) == 'ok' && $response->json('data')['status'] != 'not_available') {
+                $bill->api = $bill->product->api;
+                $bill->api_id = $response->json('data')['order_id'];
+            }//
+
+
+            return $bill;
+        } catch (\Exception | \Error $exception) {
+            return $bill;
+        }
+
+    }
+
+    public function buyFromApiFixed(Bill $bill, $id = null): Bill
+    {
+        $code = $bill->id_bill;
+        if ($code == null) {
+            return $bill;
+        }
+        $url = 'https://api.saud-card.com/client/api/newOrder/' . $bill->product->codes_api['saud'] . '/params?qty=' . $bill->product->count . '&order_uuid=' . $code . '&playerId=' . $bill->customer_id;
+        $token = $this->setting->apis['saud'];
+        $bill->save();
+        try {
+            $response = \Http::withHeaders([
+                'api-token' => $token
+            ])->get($url);
+            sleep(1);
+            if (($response->successful() && \Str::lower($response->json('status')) == 'ok') || $response->json('data')['status'] != 'not_available') {
+                $bill->api = $bill->product->api;
+                $bill->api_id = $response->json('data')['order_id'];
+            }
+            return $bill;
+        } catch (\Exception | \Error $e) {
+            return $bill;
+        }
+    }
+
+    public function checkStatus(Bill $bill): Bill
+    {
+        $url = 'https://api.saud-card.com/client/api/check?orders=[' . $bill->api_id . ']';
+        $token = $this->setting->apis['saud'];
+        $response = \Http::withHeaders([
+            'api-token' => $token
+        ])->get($url);
+        if ($response->successful() && \Str::lower($response->json('status')) == 'ok') {
+            if (isset($response->json('data')[0]['status']) && $response->json('data')[0]['status'] == 'accept') {
+                $msg_cancel = '';
+                if (isset($response->json('data')[0]['replay_api'][0])) {
+                    $msg_cancel = $response->json('data')[0]['replay_api'][0];
+                    try {
+                        $data = ['body' => $msg_cancel];
+                        $job = new OneSignalJob($bill->user->email, $data);
+                        dispatch($job);
+                    } catch (\Exception | \Error $e) {
+                    }
+                }
+                BillRepository::complateBill($bill, $msg_cancel);
+            } elseif (isset($response->json('data')[0]['status']) && $response->json('data')[0]['status'] == 'reject') {
+                $msg_cancel = '';
+                if (isset($response->json('data')[0]['replay_api'][0])) {
+                    $msg_cancel = $response->json('data')[0]['replay_api'][0];
+                    try {
+                        $data = ['body' => $msg_cancel];
+                        $job = new OneSignalJob($bill->user->email, $data);
+                        dispatch($job);
+                    } catch (\Exception | \Error $e) {
+                    }
+
+                }
+                BillRepository::cancelBill($bill, $msg_cancel);
+            }
+        }
+        return $bill;
+    }
+
+    public function cancelBill(Bill $bill, $other_data = null): Bill
+    {
+        BillRepository::cancelBill($bill, $other_data);
+        return $bill;
+    }
+}

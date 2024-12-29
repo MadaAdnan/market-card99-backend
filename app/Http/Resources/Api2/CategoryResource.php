@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Resources\Api2;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class CategoryResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
+    public function toArray($request)
+    {
+        return [
+            'id'=>$this->id,
+            'name'=>$this->name,
+            'info'=>$this->info,
+            'is_available'=>(bool)$this->is_available,
+            'img'=>$this->getImage(),
+            'sliders'=>$this->category_id==null?$this->getImages('slider'):$this->category->getImages('slider')
+        ];
+    }
+}
