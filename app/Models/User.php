@@ -115,7 +115,8 @@ class User extends Authenticatable implements HasMedia, FilamentUser
         'is_active_hook',
         'is_check_name',
         'expired_date',
-        'order_hook'
+        'order_hook',
+        'is_branch'
 
     ];
     /**

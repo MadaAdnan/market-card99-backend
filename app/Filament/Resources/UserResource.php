@@ -56,6 +56,7 @@ class UserResource extends Resource
                     Forms\Components\Toggle::make('is_affiliate')->label('تفعيل الربح من الإحالة')->visible(auth()->user()->hasRole('super_admin')),
                     Forms\Components\Toggle::make('is_fixed_group')->label('تثبيت الفئة')->visible(auth()->user()->hasRole('super_admin')),
                     Forms\Components\Toggle::make('is_active_hook')->label('تفعيل الإشعار للموقع المربوط')->reactive()->visible(auth()->user()->hasRole('super_admin')),
+                    Forms\Components\Toggle::make('is_branch')->label('تفعيل كفرع')->visible(auth()->user()->hasRole('super_admin')),
                     Forms\Components\TextInput::make('hook_api')->label('رابط Api  الموقع المربوط')->url()->visible(fn($get)=>auth()->user()->hasRole('super_admin')&& $get('is_active_hook')),
                     Forms\Components\TextInput::make('order_hook')->label('رابط Api  لتعديل حالة الطلب')->url()->visible(fn($get)=>auth()->user()->hasRole('super_admin')&& $get('is_active_hook')),
                     Forms\Components\Toggle::make('is_check_name')->label('تفعيل الفحص')->visible(fn($get)=>auth()->user()->hasRole('super_admin')),
