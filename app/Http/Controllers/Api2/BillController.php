@@ -138,6 +138,24 @@ class BillController extends Controller
                             'bill_id'=>$bill->id,
                         ]);
                         //
+                        /**
+                         * @var $branch User
+                         */
+                        $branch= auth()->user()->user?->user;
+                        if(!$product->is_offer && $branch !=null && $branch->is_branch ){
+                            $branch_ratio=  Setting::first()->branch_ratio * $ratio;
+                            $ratio-=$branch_ratio;
+                            if($branch_ratio>0){
+                                Balance::create([
+                                    'credit' => $branch_ratio,
+                                    'user_id' => $branch->id,
+                                    'debit' => 0,
+                                    'info' => 'ربح عن طريق ' . auth()->user()->name,
+                                    'bill_id'=>$bill->id,
+                                ]);
+                            }
+
+                        }
                         if (!$product->is_offer && auth()->user()->user != null) {
                             Point::create([
                                 'credit' => $ratio,
@@ -156,23 +174,7 @@ class BillController extends Controller
                                 'bill_id'=>$bill->id,
                             ]);
                         }
-                        /**
-                         * @var $branch User
-                         */
-                        $branch= auth()->user()->user?->user;
-                        if(!$product->is_offer && $branch !=null && $branch->is_branch ){
-                          $branch_ratio=  Setting::first()->branch_ratio * $product->getPrice();
-                          if($branch_ratio>0){
-                              Balance::create([
-                                  'credit' => $branch_ratio,
-                                  'user_id' => $branch->id,
-                                  'debit' => 0,
-                                  'info' => 'ربح عن طريق ' . auth()->user()->name,
-                                  'bill_id'=>$bill->id,
-                              ]);
-                          }
 
-                        }
                         \DB::commit();
                         return HelperSupport::sendData(['bill' => new BillResource($bill), 'user' => new UserResource(auth()->user())]);
                     } catch (\Exception | \Error $e) {

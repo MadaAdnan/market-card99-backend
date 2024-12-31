@@ -24,10 +24,15 @@ class BillRepository
             $bill->update(['status' => BillStatusEnum::COMPLETE->value, 'data_id' => $other_data]);
             $parent = $bill->user->user;
             $affiliate_user_id = $bill->user->affiliate_id;
+            $branch_ratio=0;
+            $branch= $bill->user->user?->user;
+            if($branch!=null){
+                $branch_ratio=($setting->branch_ratio * $bill->ratio);
+            }
 
             if ($parent != null && $bill->ratio > 0) {
                 Point::create([
-                    'credit' => $bill->ratio,
+                    'credit' => $bill->ratio-$branch_ratio,
                     'debit' => 0,
                     'info' => 'ربح من مبيع ' . $bill->user->name,
                     'user_id' => $parent->id
@@ -37,15 +42,15 @@ class BillRepository
 
             if ($affiliate_user_id != null && $setting->is_affiliate) {
                 Point::create([
-                    'credit' => ($setting->affiliate_ratio * $bill->price),
+                    'credit' => ($setting->affiliate_ratio * $bill->price)-$branch_ratio,
                     'debit' => 0,
                     'info' => 'ربح من بيع بالعمولة',
                     'user_id' => $affiliate_user_id
                 ]);
             }
-            $branch= $bill->user->user?->user;
+
             if(!$bill->product->is_offer && $branch !=null && $branch->is_branch ){
-                $branch_ratio=  Setting::first()->branch_ratio * $bill->product->getPrice();
+
                 if($branch_ratio>0){
                     Balance::create([
                         'credit' => $branch_ratio,
