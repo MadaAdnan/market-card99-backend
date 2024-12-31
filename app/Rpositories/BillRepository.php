@@ -76,7 +76,7 @@ class BillRepository
         DB::beginTransaction();
         try {
 
-            /*if ($bill->status->value == BillStatusEnum::COMPLETE->value) {
+            if ($bill->status->value == BillStatusEnum::COMPLETE->value) {
                 if ($bill->user->user != null) {
                     Point::create([
                         'debit' => $bill->ratio,
@@ -117,9 +117,9 @@ class BillRepository
                     'bill_id' => $bill->id,
                 ]);
 
-            }*/
-            $bill->points()->delete();
-            $bill->balances()->delete();
+            }
+          /*  $bill->points()->delete();
+            $bill->balances()->delete();*/
             $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
             DB::commit();
             try {
