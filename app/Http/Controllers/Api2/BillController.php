@@ -343,6 +343,7 @@ class BillController extends Controller
 
 
             }
+            $bill->save();
 
             #########################3
             Balance::create([
