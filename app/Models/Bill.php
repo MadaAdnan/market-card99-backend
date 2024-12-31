@@ -7,6 +7,7 @@ use App\Observers\BillObserve;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -109,5 +110,15 @@ class Bill extends Model
     public function black(): BelongsTo
     {
         return $this->belongsTo(Black::class);
+    }
+
+    public function balances(): HasMany
+    {
+        return $this->hasMany(Balance::class, 'bill_id');
+    }
+
+    public function points(): HasMany
+    {
+        return $this->hasMany(Point::class, 'bill_id');
     }
 }

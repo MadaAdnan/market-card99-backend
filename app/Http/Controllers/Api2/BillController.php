@@ -25,6 +25,7 @@ use App\Models\Item;
 use App\Models\Point;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Models\User;
 use App\Support\HelperSupport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -154,6 +155,23 @@ class BillController extends Controller
                                 'info' => 'ربح عن طريق ' . auth()->user()->name,
                                 'bill_id'=>$bill->id,
                             ]);
+                        }
+                        /**
+                         * @var $branch User
+                         */
+                        $branch= auth()->user()->user?->user;
+                        if(!$product->is_offer && $branch !=null && $branch->is_branch ){
+                          $branch_ratio=  Setting::first()->branch_ratio * $product->getPrice();
+                          if($branch_ratio>0){
+                              Balance::create([
+                                  'credit' => $branch_ratio,
+                                  'user_id' => $branch->id,
+                                  'debit' => 0,
+                                  'info' => 'ربح عن طريق ' . auth()->user()->name,
+                                  'bill_id'=>$bill->id,
+                              ]);
+                          }
+
                         }
                         \DB::commit();
                         return HelperSupport::sendData(['bill' => new BillResource($bill), 'user' => new UserResource(auth()->user())]);

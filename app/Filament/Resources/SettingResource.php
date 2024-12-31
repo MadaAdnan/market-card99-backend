@@ -65,6 +65,7 @@ class SettingResource extends Resource
                                 Forms\Components\TextInput::make('discount_online')->label('نسبة حسم الأرقام لل Api')->numeric()->required(),
                                 Forms\Components\TextInput::make('discount_delegate_online')->label('نسبة حسم الوكلاء من Online')->numeric()->required(),
                                 Forms\Components\TextInput::make('fixed_ratio')->label('نسبة ربح الوكلاء المخفيين')->numeric()->required(),
+                                Forms\Components\TextInput::make('branch_ratio')->label('نسبة ربح الفرع من زبون الوكيل')->numeric()->required(),
 
 
                             ]),

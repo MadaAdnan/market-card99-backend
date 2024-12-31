@@ -35,7 +35,7 @@ class BillRepository
 
             }
 
-                if ($affiliate_user_id != null && $setting->is_affiliate) {
+            if ($affiliate_user_id != null && $setting->is_affiliate) {
                 Point::create([
                     'credit' => ($setting->affiliate_ratio * $bill->price),
                     'debit' => 0,
@@ -43,12 +43,25 @@ class BillRepository
                     'user_id' => $affiliate_user_id
                 ]);
             }
+            $branch= $bill->user->user?->user;
+            if(!$bill->product->is_offer && $branch !=null && $branch->is_branch ){
+                $branch_ratio=  Setting::first()->branch_ratio * $bill->product->getPrice();
+                if($branch_ratio>0){
+                    Balance::create([
+                        'credit' => $branch_ratio,
+                        'user_id' => $branch->id,
+                        'debit' => 0,
+                        'info' => 'ربح عن طريق ' . auth()->user()->name,
+                        'bill_id'=>$bill->id,
+                    ]);
+                }
 
+            }
 
             DB::commit();
-            try{
-                SendNotificationToUser($bill->user,'success',$bill);
-            }catch(\Exception|\Error $ex){
+            try {
+                SendNotificationToUser($bill->user, 'success', $bill);
+            } catch (\Exception | \Error $ex) {
 
             }
         } catch (\Exception | \Error $e) {
@@ -63,14 +76,14 @@ class BillRepository
         DB::beginTransaction();
         try {
 
-            if ($bill->status->value == BillStatusEnum::COMPLETE->value) {
+            /*if ($bill->status->value == BillStatusEnum::COMPLETE->value) {
                 if ($bill->user->user != null) {
                     Point::create([
                         'debit' => $bill->ratio,
                         'credit' => 0,
                         'info' => 'إعادة نسبة ربح طلب  ' . $bill->product->name,
                         'user_id' => $bill->user->user->id,
-                        'bill_id'=>$bill->id,
+                        'bill_id' => $bill->id,
                     ]);
                 } elseif ($bill->user->affiliate_user != null) {
                     Point::create([
@@ -78,7 +91,7 @@ class BillRepository
                         'credit' => 0,
                         'info' => 'إعادة نسبة ربح طلب  ' . $bill->product->name,
                         'user_id' => $bill->user->affiliate_user->id,
-                        'bill_id'=>$bill->id,
+                        'bill_id' => $bill->id,
                     ]);
                 }
 
@@ -89,7 +102,7 @@ class BillRepository
                     'debit' => 0,
                     'info' => 'إعادة قيمة طلب  ' . $bill->product->name,
                     'user_id' => $bill->user_id,
-                    'bill_id'=>$bill->id,
+                    'bill_id' => $bill->id,
                 ]);
 
             }
@@ -101,15 +114,17 @@ class BillRepository
                     'debit' => 0,
                     'info' => 'إعادة قيمة طلب  ' . $bill->product->name,
                     'user_id' => $bill->user_id,
-                    'bill_id'=>$bill->id,
+                    'bill_id' => $bill->id,
                 ]);
 
-            }
+            }*/
+            $bill->points()->delete();
+            $bill->balances()->delete();
             $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
             DB::commit();
-            try{
-                SendNotificationToUser($bill->user,'error',$bill);
-            }catch(\Exception|\Error $ex){
+            try {
+                SendNotificationToUser($bill->user, 'error', $bill);
+            } catch (\Exception | \Error $ex) {
 
             }
         } catch (\Exception | \Error $e) {
