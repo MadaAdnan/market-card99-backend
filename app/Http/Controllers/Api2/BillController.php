@@ -146,7 +146,7 @@ class BillController extends Controller
                             $branch_ratio=  Setting::first()->branch_ratio * $ratio;
                             $ratio-=$branch_ratio;
                             if($branch_ratio>0){
-                                Balance::create([
+                                Point::create([
                                     'credit' => $branch_ratio,
                                     'user_id' => $branch->id,
                                     'debit' => 0,

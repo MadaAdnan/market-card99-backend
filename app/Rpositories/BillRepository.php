@@ -52,7 +52,7 @@ class BillRepository
             if(!$bill->product->is_offer && $branch !=null && $branch->is_branch ){
 
                 if($branch_ratio>0){
-                    Balance::create([
+                    Point::create([
                         'credit' => $branch_ratio,
                         'user_id' => $branch->id,
                         'debit' => 0,
