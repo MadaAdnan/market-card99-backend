@@ -35,7 +35,8 @@ class BillRepository
                     'credit' => $bill->ratio-$branch_ratio,
                     'debit' => 0,
                     'info' => 'ربح من مبيع ' . $bill->user->name,
-                    'user_id' => $parent->id
+                    'user_id' => $parent->id,
+                    'bill_id'=>$bill->id,
                 ]);
 
             }
@@ -45,7 +46,8 @@ class BillRepository
                     'credit' => ($setting->affiliate_ratio * $bill->price)-$branch_ratio,
                     'debit' => 0,
                     'info' => 'ربح من بيع بالعمولة',
-                    'user_id' => $affiliate_user_id
+                    'user_id' => $affiliate_user_id,
+                    'bill_id'=>$bill->id,
                 ]);
             }
 
