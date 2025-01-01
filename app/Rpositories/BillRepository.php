@@ -99,7 +99,7 @@ class BillRepository
                         'bill_id' => $bill->id,
                     ]);
                 }
-$bill->points()->delete();
+
                 Balance::create([
                     'credit' => $bill->price,
                     'total' => $bill->user->balance + $bill->price,
@@ -123,8 +123,8 @@ $bill->points()->delete();
                 ]);
 
             }
-          /*  $bill->points()->delete();
-            $bill->balances()->delete();*/
+           $bill->points()->delete();
+        /*     $bill->balances()->delete();*/
             $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
             DB::commit();
             try {
