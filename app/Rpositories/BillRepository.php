@@ -99,7 +99,7 @@ class BillRepository
                         'bill_id' => $bill->id,
                     ]);
                 }
-
+$bill->points()->delete();
                 Balance::create([
                     'credit' => $bill->price,
                     'total' => $bill->user->balance + $bill->price,
