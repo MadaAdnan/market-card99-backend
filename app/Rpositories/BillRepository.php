@@ -51,7 +51,7 @@ class BillRepository
                 ]);
             }
 
-            if(!$bill->product->is_offer && $branch !=null && $branch->is_branch ){
+            if(!$bill->product?->is_offer && $branch !=null && $branch->is_branch ){
 
                 if($branch_ratio>0){
                     Point::create([
@@ -92,12 +92,12 @@ class BillRepository
                         'user_id' => $bill->user->user->id,
                         'bill_id' => $bill->id,
                     ]);
-                } elseif ($bill->user->affiliate_user != null) {
+                } elseif ($bill->user?->affiliate_user != null) {
                     Point::create([
                         'debit' => $bill->ratio,
                         'credit' => 0,
-                        'info' => 'إعادة نسبة ربح طلب  ' . $bill->product->name,
-                        'user_id' => $bill->user->affiliate_user->id,
+                        'info' => 'إعادة نسبة ربح طلب  ' . $bill->product?->name,
+                        'user_id' => $bill->user->affiliate_user?->id,
                         'bill_id' => $bill->id,
                     ]);
                 }

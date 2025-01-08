@@ -175,7 +175,7 @@ class BillResource extends Resource
                         $record->invoice->update(['status' => BillStatusEnum::COMPLETE->value]);
                         Notification::make('success')->success()->title('نجاح العملبة')->body('تم ٌبول الطلب بنجاح')->send();
 
-                    })->visible(fn($record) => $record->api_id == null&&$record->black_id==null)
+                    })->visible(fn($record) => ($record->api_id == null || now()->greaterThan($record->created_at?->addMinutes(5)))&&$record->black_id==null)
                     ->requiresConfirmation()->color('success')->button(),
                 Tables\Actions\Action::make('remove')->label('إزالة من القائمة السوداء')
                     ->action(fn($record)=>$record->update(['black_id'=>null]))->visible(fn($record)=>$record->black_id!=null)
