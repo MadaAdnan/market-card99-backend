@@ -40,9 +40,9 @@ class BillsChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-
+       
         $bill=DB::table('bills')
-            ->whereBetween('created_at',[])
+            ->whereBetween('created_at',[now()->startOfYear(),now()])
             ->where('status',BillStatusEnum::COMPLETE->value)->whereBetween('created_at',[now()->startOfYear(),now()->endOfYear()])
             ->selectRaw('(SUM(price) - SUM(cost) - SUM(ratio)) as total , Month(created_at) as month')->groupByRaw('Month(created_at)')->get();
         return [
