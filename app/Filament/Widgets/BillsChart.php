@@ -40,7 +40,7 @@ class BillsChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-       
+
         $bill=DB::table('bills')
             ->whereBetween('created_at',[now()->startOfYear(),now()])
             ->where('status',BillStatusEnum::COMPLETE->value)->whereBetween('created_at',[now()->startOfYear(),now()->endOfYear()])
