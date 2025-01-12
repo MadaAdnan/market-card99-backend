@@ -47,7 +47,7 @@ class BillsChartDRD3 extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-        $year=now()->year;
+
         $bill=DB::table('bills')->where('api','drd3')
             ->where('status',BillStatusEnum::COMPLETE->value)
             ->whereBetween('created_at',[now()->startOfYear(),now()->endOfYear()])

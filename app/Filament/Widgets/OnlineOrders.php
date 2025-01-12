@@ -46,7 +46,7 @@ class OnlineOrders extends ApexChartWidget
         $bill=DB::table('orders')
 
             ->where('status',OrderStatusEnum::COMPLETE->value)
-            ->whereBetween('created_at',[Carbon::parse('2024-04-08'),now()])
+            ->whereBetween('created_at',[now()->startOfYear(),now()])
             ->selectRaw('SUM(price) - SUM(cost) - SUM(ratio) as total , Month(created_at) as month')->groupByRaw('Month(created_at)')->get();
         return [
             'chart' => [

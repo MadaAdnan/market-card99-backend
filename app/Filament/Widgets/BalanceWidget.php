@@ -25,7 +25,7 @@ class BalanceWidget extends BaseWidget
     protected function getCards(): array
     {
         $balancesUser=\DB::table('balances')->selectRaw('Sum(credit-debit) as total')->first()?->total;
-        $start="2023-08-01";
+        $start=now()->startOfYear();
         $end=now();
         $yutu=Order::whereHas('server',fn($q)=>$q->where('code',Yutu::class))->where('status',OrderStatusEnum::COMPLETE->value)->whereBetween('created_at',[$start,$end])->selectRaw('SUM(price) as total')->first()?->total;
         $card= [
