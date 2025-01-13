@@ -272,7 +272,7 @@ class BillController extends Controller
             if (!CheckOrder::checkIdPlayer($request->id_user)) {
                 throw new \Exception('لا يمكن الطلب لنفس ال ID  قبل مضي 20 ثانية');
             }
-            $bill = new Bill();
+            $dataBill=[];
             if ($product->is_free) {
                 if ($request->amount < $product->min_amount) {
                     throw new \Exception('لا يمكن طلب كمية أقل من ' . $product->min_amount);
@@ -283,22 +283,23 @@ class BillController extends Controller
                 $total_cost = ($product->total_cost / $product->amount) * $request->amount;
                 $total_price = ($product->getPrice() / $product->amount) * $request->amount;
                 $ratio = 0;
-                $bill->amount = $request->amount;
+                $dataBill['amount'] = $request->amount;
             }//
             else {
                 $total_cost = $product->total_cost;
                 $total_price = $product->getPrice();
                 $ratio = 0;
-                $bill->amount = $product->count;
+                $dataBill['amount'] = $product->count;
 
             }
             if (!$product->is_offer && auth()->user()->user != null) {
                 $ratio = ($total_cost * auth()->user()->group->ratio_delegate);
-                $bill->ratio = $ratio;
+                $dataBill['ratio']= $ratio;
+
             }//
             elseif (!$product->is_offer && auth()->user()->affiliate_user != null) {
                 $ratio = ($total_cost * getSettings('affiliate_ratio'));
-                $bill->ratio = $ratio;
+                $dataBill['ratio'] = $ratio;
             }
             if (auth()->user()->getTotalBalance() < $total_price) {
                 throw new \Exception('لا تملك رصيد كافي للشراء');
@@ -311,40 +312,34 @@ class BillController extends Controller
                 'code' => Str::random(6),
                 'total' => $total_price,
             ]);
+            $dataBill['id_bill']= Str::uuid()->toString();
 
-            $bill->id_bill = Str::uuid()->toString();
-            $bill->price = $total_price;
-            $bill->cost = $total_cost;
-            $bill->user_id = auth()->id();
-            $bill->status = BillStatusEnum::PENDING->value;
-            $bill->category_id = $product->category_id;
-            $bill->product_id = $product->id;
-            $bill->customer_note = $request->info;
-            $bill->invoice_id = $invoice->id;
+            $dataBill['price']= $total_price;
+            $dataBill['cost'] = $total_cost;
+            $dataBill['user_id'] = auth()->id();
+            $dataBill['status'] = BillStatusEnum::PENDING->value;
+            $dataBill['category_id']= $product->category_id;
+            $dataBill['product_id'] = $product->id;
+            $dataBill['customer_note']= $request->info;
+            $dataBill['invoice_id']=$invoice->id;
+
             ########################
             $black = Black::where('data', trim($request->id_user))->first();
             if ($black) {
-                $bill->black_id = $black->id;
+                $dataBill['black_id'] = $black->id;
+
             }
             if ($product->type == ProductTypeEnum::NEED_ID) {
-
-                $bill->customer_id = $request->id_user;
-                $bill->customer_name = $request->name;
-
-
+                $dataBill['customer_id'] = $request->id_user;
+                $dataBill['customer_name'] =$request->name;
             }//
             elseif ($product->type == ProductTypeEnum::NEED_ACCOUNT) {
-                $bill->customer_username = $request->id_user;
-                $bill->customer_password = $request->name;
-
-
+                $dataBill['customer_username'] =$request->id_user;
+                $dataBill['customer_password']= $request->name;
             } else {
-                $bill->customer_username = $request->id_user;
-                // $bill->customer_password = $request->name;
-
-
+                $dataBill['customer_username'] = $request->id_user;
             }
-            $bill->save();
+            $bill=Bill::create($dataBill);
 
             #########################3
             Balance::create([
