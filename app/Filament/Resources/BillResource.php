@@ -223,6 +223,12 @@ class BillResource extends Resource
                     }
                 })->visible(fn($record) => $record->api == 'drd3')->label('إنهاء الطلب')->requiresConfirmation()->color('success')->button()
             ])
+            ->headerActions([
+                Tables\Actions\Action::make('order_status')->action(function(){
+                    \Artisan::call('optimize:clear');
+                    \Artisan::call('order:status');
+                })->label('فحص')
+            ])
             ->bulkActions([
 //                Tables\Actions\DeleteBulkAction::make(),
             ]);
