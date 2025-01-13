@@ -92,7 +92,7 @@ class Mazaya implements PayByApi
         $token = $this->setting->apis['mazaya'];
 
         try {
-            $response = \Http::withToken($token)->get($url);
+            $response = \Http::withToken($token)->timeout(60)->get($url);
             if ($response->successful() && isset($response->json()['order'])) {
 
                 if ($response->json('order')['status'] == 'complete' ) {

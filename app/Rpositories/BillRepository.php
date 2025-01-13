@@ -18,8 +18,9 @@ class BillRepository
 {
     public static function complateBill(Bill $bill, $other_data = null)
     {
+
         $setting = Setting::first();
-        DB::beginTransaction();
+
         try {
             $bill->update(['status' => BillStatusEnum::COMPLETE->value, 'data_id' => $other_data]);
             $parent = $bill->user->user;
@@ -65,7 +66,7 @@ class BillRepository
 
             }
 
-            DB::commit();
+
             try {
                 SendNotificationToUser($bill->user, 'success', $bill);
             } catch (\Exception | \Error $ex) {
@@ -73,14 +74,14 @@ class BillRepository
             }
         } catch (\Exception | \Error $e) {
 
-            DB::rollBack();
+
         }
 
     }
 
     public static function cancelBill(Bill $bill, $other_data = null)
     {
-        DB::beginTransaction();
+        $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
         try {
 
             if ($bill->status->value == BillStatusEnum::COMPLETE->value) {
@@ -125,10 +126,10 @@ class BillRepository
 
             }
 
-            $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
+
             $bill->points()->delete();
            $bill->balances()->delete();
-            DB::commit();
+
             try {
                 SendNotificationToUser($bill->user, 'error', $bill);
             } catch (\Exception | \Error $ex) {
@@ -136,7 +137,7 @@ class BillRepository
             }
         } catch (\Exception | \Error $e) {
 
-            DB::rollBack();
+
         }
 
 
