@@ -124,9 +124,10 @@ class BillRepository
                 ]);
 
             }
+
+            $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
             $bill->points()->delete();
             $bill->balances()->delete();
-            $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
             DB::commit();
             try {
                 SendNotificationToUser($bill->user, 'error', $bill);
