@@ -24,42 +24,42 @@ class BillRepository
             $bill->update(['status' => BillStatusEnum::COMPLETE->value, 'data_id' => $other_data]);
             $parent = $bill->user->user;
             $affiliate_user_id = $bill->user->affiliate_id;
-            $branch_ratio=0;
-            $branch= $bill->user->user?->user;
-            if($branch!=null){
-                $branch_ratio=($setting->branch_ratio * $bill->ratio);
+            $branch_ratio = 0;
+            $branch = $bill->user->user?->user;
+            if ($branch != null) {
+                $branch_ratio = ($setting->branch_ratio * $bill->ratio);
             }
 
             if ($parent != null && $bill->ratio > 0) {
                 Point::create([
-                    'credit' => $bill->ratio-$branch_ratio,
+                    'credit' => $bill->ratio - $branch_ratio,
                     'debit' => 0,
                     'info' => 'ربح من مبيع ' . $bill->user->name,
                     'user_id' => $parent->id,
-                    'bill_id'=>$bill->id,
+                    'bill_id' => $bill->id,
                 ]);
 
             }
 
             if ($affiliate_user_id != null && $setting->is_affiliate) {
                 Point::create([
-                    'credit' => ($setting->affiliate_ratio * $bill->price)-$branch_ratio,
+                    'credit' => ($setting->affiliate_ratio * $bill->price) - $branch_ratio,
                     'debit' => 0,
                     'info' => 'ربح من بيع بالعمولة',
                     'user_id' => $affiliate_user_id,
-                    'bill_id'=>$bill->id,
+                    'bill_id' => $bill->id,
                 ]);
             }
 
-            if(!$bill->product?->is_offer && $branch !=null && $branch->is_branch ){
+            if (!$bill->product?->is_offer && $branch != null && $branch->is_branch) {
 
-                if($branch_ratio>0){
+                if ($branch_ratio > 0) {
                     Point::create([
                         'credit' => $branch_ratio,
                         'user_id' => $branch->id,
                         'debit' => 0,
                         'info' => 'ربح عن طريق ' . auth()->user()->name,
-                        'bill_id'=>$bill->id,
+                        'bill_id' => $bill->id,
                     ]);
                 }
 
@@ -112,8 +112,7 @@ class BillRepository
                     'bill_id' => $bill->id,
                 ]);
 
-            }
-            elseif ($bill->status->value != BillStatusEnum::CANCEL->value) {
+            } elseif ($bill->status->value != BillStatusEnum::CANCEL->value) {
                 Balance::create([
                     'credit' => $bill->price,
                     'total' => $bill->user->balance + $bill->price,
@@ -125,8 +124,8 @@ class BillRepository
                 ]);
 
             }
-           $bill->points()->delete();
-             $bill->balances()->delete();
+            $bill->points()->delete();
+            $bill->balances()->delete();
             $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
             DB::commit();
             try {
