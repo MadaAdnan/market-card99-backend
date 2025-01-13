@@ -197,6 +197,7 @@ class BillController extends Controller
             if ($product->type == ProductTypeEnum::NEED_ACCOUNT) {
                 $bill->customer_password = $player_name;
             }
+            $bill->save();
             #########################3
             Balance::create([
                 'user_id' => auth()->id(),
