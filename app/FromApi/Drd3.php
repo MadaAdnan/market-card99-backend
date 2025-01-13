@@ -79,7 +79,7 @@ class Drd3 implements PayByApi
         ];
         try {
             $response = \Http::post($url, $data);
-            dd($response->body());
+
 info("DRD3");
 info($response->body());
             if($response->successful() && strtolower($response->json('status'))==strtolower('Completed')){
