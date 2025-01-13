@@ -102,7 +102,7 @@ class BillRepository
                     ]);
                 }
 
-                Balance::create([
+               /* Balance::create([
                     'credit' => $bill->price,
                     'total' => $bill->user->balance + $bill->price,
                     'ratio' => $bill->ratio,
@@ -110,10 +110,10 @@ class BillRepository
                     'info' => 'إعادة قيمة طلب  ' . $bill->product->name,
                     'user_id' => $bill->user_id,
                     'bill_id' => $bill->id,
-                ]);
+                ]);*/
 
             } elseif ($bill->status->value != BillStatusEnum::CANCEL->value) {
-                Balance::create([
+               /* Balance::create([
                     'credit' => $bill->price,
                     'total' => $bill->user->balance + $bill->price,
                     'ratio' => $bill->ratio,
@@ -121,13 +121,13 @@ class BillRepository
                     'info' => 'إعادة قيمة طلب  ' . $bill->product->name,
                     'user_id' => $bill->user_id,
                     'bill_id' => $bill->id,
-                ]);
+                ]);*/
 
             }
 
             $bill->update(['status' => BillStatusEnum::CANCEL->value, 'cancel_note' => $other_data]);
             $bill->points()->delete();
-          //  $bill->balances()->delete();
+           $bill->balances()->delete();
             DB::commit();
             try {
                 SendNotificationToUser($bill->user, 'error', $bill);
