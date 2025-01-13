@@ -9,6 +9,7 @@ use App\FromApi\Drd3;
 use App\FromApi\EkoCard;
 use App\FromApi\LifeCash;
 use App\FromApi\Mazaya;
+use App\FromApi\PayByApi;
 use App\FromApi\SaudCard;
 use App\FromApi\SpeedCard;
 use App\Models\Bill;
@@ -67,6 +68,10 @@ class CompleteOrderCommand extends Command
                     $service = new CachBack($setting);
                     break;
             }
+            /**
+             * @var $service PayByApi
+             * @var $order Bill
+             */
             $service->checkStatus($order);
 
 
