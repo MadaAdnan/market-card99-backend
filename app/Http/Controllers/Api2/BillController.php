@@ -125,6 +125,7 @@ class BillController extends Controller
                             $data['ratio'] = $ratio;
                         }
                         $bill = Bill::create($data);
+                        info('BILL_2'.$bill->id);
                         $item->update([
                             'bill_id' => $bill->id,
                             'active' => 0,
@@ -217,6 +218,7 @@ class BillController extends Controller
                             'amount' => 1,
                         ]);
                         $bill->save();
+                        info('BILL_1'.$bill->id);
                         Balance::create([
                             'user_id' => auth()->id(),
                             'info' => 'شراء منتج ' . $product->name,
@@ -339,7 +341,7 @@ class BillController extends Controller
                 $dataBill['customer_username'] = $request->id_user;
             }
             $bill = Bill::create($dataBill);
-
+info('BILL_@'.$bill->id);
             #########################3
             Balance::create([
                 'user_id' => auth()->id(),
@@ -561,6 +563,7 @@ class BillController extends Controller
                             $data['ratio'] = $ratio;
                         }
                         $bill = Bill::create($data);
+                        info('BILL_4'.$bill->id);
                         $item->update([
                             'bill_id' => $bill->id,
                             'active' => 0,
@@ -630,6 +633,7 @@ class BillController extends Controller
                             'product_id' => $product->id,
                             'amount' => 1,
                         ]);
+                        info('BILL_9'.$bill->id);
                         Balance::create([
                             'user_id' => auth()->id(),
                             'info' => 'شراء منتج ' . $product->name,
