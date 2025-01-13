@@ -41,6 +41,7 @@ class CompleteOrderCommand extends Command
     {
         $orders = Bill::where('status', \App\Enums\BillStatusEnum::PENDING->value)->whereNotNull('api_id')->get();
         $setting = Setting::first();
+        info("TEST ORDER -".$orders->count());
         foreach ($orders as $order) {
             info("TEST ORDER");
             switch ($order->api) {
