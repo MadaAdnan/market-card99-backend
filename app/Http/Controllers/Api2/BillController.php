@@ -735,6 +735,7 @@ info('BILL_@'.$bill->id);
 
 
             }
+            $bill->save();
             #########################3
             Balance::create([
                 'user_id' => auth()->id(),
