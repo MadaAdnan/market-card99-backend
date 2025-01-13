@@ -86,7 +86,7 @@ class BillResource extends Resource
 
                 Tables\Columns\TextColumn::make('created_at')->date('Y-m-d h:i a')->label('تاريخ الطلب')->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap;font-size:13px'])->toggleable()->size('sm'),
                 Tables\Columns\TextColumn::make('api_id')->label('Api-NO')->searchable(isIndividual: true)->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap'])
-                    ->description(fn($record)=>'الموقع : '.$record->api)->size('sm')
+                    ->description(fn($record)=>'الموقع : '.$record->api.'-' .$record->api_id)->size('sm')
                     ->toggleable()->visible(auth()->user()->hasRole('super_admin')),
 //                Tables\Columns\TextColumn::make('api')->label('Api')->extraCellAttributes(['class' => 'border'])->toggleable()->visible(auth()->user()->hasRole('super_admin')),
 //                Tables\Columns\TextColumn::make('note')->label('الرد')->formatStateUsing(fn($record) => $record->data_id ?? $record->cancel_note ?? '')->extraCellAttributes(['class' => 'border'])->toggleable()->visible(auth()->user()->hasRole('super_admin')),
