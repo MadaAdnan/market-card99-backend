@@ -135,23 +135,23 @@ class BillController extends Controller
                             'debit' => $product->getPrice(),
                             'credit' => 0,
                             'total' => auth()->user()->balance - $product->getPrice(),
-                            'bill_id'=>$bill->id,
+                            'bill_id' => $bill->id,
                         ]);
                         //
                         /**
                          * @var $branch User
                          */
-                        $branch= auth()->user()->user?->user;
-                        if(!$product->is_offer && $branch !=null && $branch->is_branch ){
-                            $branch_ratio=  Setting::first()->branch_ratio * $ratio;
-                            $ratio-=$branch_ratio;
-                            if($branch_ratio>0){
+                        $branch = auth()->user()->user?->user;
+                        if (!$product->is_offer && $branch != null && $branch->is_branch) {
+                            $branch_ratio = Setting::first()->branch_ratio * $ratio;
+                            $ratio -= $branch_ratio;
+                            if ($branch_ratio > 0) {
                                 Point::create([
                                     'credit' => $branch_ratio,
                                     'user_id' => $branch->id,
                                     'debit' => 0,
                                     'info' => 'ربح عن طريق ' . auth()->user()->name,
-                                    'bill_id'=>$bill->id,
+                                    'bill_id' => $bill->id,
                                 ]);
                             }
 
@@ -162,16 +162,15 @@ class BillController extends Controller
                                 'user_id' => auth()->user()->user_id,
                                 'debit' => 0,
                                 'info' => 'ربح عن طريق ' . auth()->user()->name,
-                                'bill_id'=>$bill->id,
+                                'bill_id' => $bill->id,
                             ]);
-                        }
-                        elseif (!$product->is_offer && auth()->user()->affiliate_user != null) {
+                        } elseif (!$product->is_offer && auth()->user()->affiliate_user != null) {
                             Point::create([
                                 'credit' => $ratio,
                                 'user_id' => auth()->user()->affiliate_id,
                                 'debit' => 0,
                                 'info' => 'ربح عن طريق ' . auth()->user()->name,
-                                'bill_id'=>$bill->id,
+                                'bill_id' => $bill->id,
                             ]);
                         }
 
@@ -198,9 +197,9 @@ class BillController extends Controller
                         $service = new EkoCard(getSettingsModel());
                     } elseif ($product->api == 'as7ab') {
                         $service = new As7ab(getSettingsModel());
-                    }elseif ($product->api == 'mazaya') {
+                    } elseif ($product->api == 'mazaya') {
                         $service = new Mazaya(getSettingsModel());
-                    }elseif ($product->api == 'cache-back') {
+                    } elseif ($product->api == 'cache-back') {
                         $service = new CachBack(getSettingsModel());
                     }
 
@@ -224,7 +223,7 @@ class BillController extends Controller
                             'debit' => $product->getPrice(),
                             'credit' => 0,
                             'total' => auth()->user()->balance - $product->getPrice(),
-                            'bill_id'=>$bill->id,
+                            'bill_id' => $bill->id,
                         ]);
 
                         $bill = $service->buyFromApiFixed($bill);
@@ -272,7 +271,7 @@ class BillController extends Controller
             if (!CheckOrder::checkIdPlayer($request->id_user)) {
                 throw new \Exception('لا يمكن الطلب لنفس ال ID  قبل مضي 20 ثانية');
             }
-            $dataBill=[];
+            $dataBill = [];
             if ($product->is_free) {
                 if ($request->amount < $product->min_amount) {
                     throw new \Exception('لا يمكن طلب كمية أقل من ' . $product->min_amount);
@@ -294,7 +293,7 @@ class BillController extends Controller
             }
             if (!$product->is_offer && auth()->user()->user != null) {
                 $ratio = ($total_cost * auth()->user()->group->ratio_delegate);
-                $dataBill['ratio']= $ratio;
+                $dataBill['ratio'] = $ratio;
 
             }//
             elseif (!$product->is_offer && auth()->user()->affiliate_user != null) {
@@ -312,16 +311,16 @@ class BillController extends Controller
                 'code' => Str::random(6),
                 'total' => $total_price,
             ]);
-            $dataBill['id_bill']= Str::uuid()->toString();
+            $dataBill['id_bill'] = Str::uuid()->toString();
 
-            $dataBill['price']= $total_price;
+            $dataBill['price'] = $total_price;
             $dataBill['cost'] = $total_cost;
             $dataBill['user_id'] = auth()->id();
             $dataBill['status'] = BillStatusEnum::PENDING->value;
-            $dataBill['category_id']= $product->category_id;
+            $dataBill['category_id'] = $product->category_id;
             $dataBill['product_id'] = $product->id;
-            $dataBill['customer_note']= $request->info;
-            $dataBill['invoice_id']=$invoice->id;
+            $dataBill['customer_note'] = $request->info;
+            $dataBill['invoice_id'] = $invoice->id;
 
             ########################
             $black = Black::where('data', trim($request->id_user))->first();
@@ -331,15 +330,15 @@ class BillController extends Controller
             }
             if ($product->type == ProductTypeEnum::NEED_ID) {
                 $dataBill['customer_id'] = $request->id_user;
-                $dataBill['customer_name'] =$request->name;
+                $dataBill['customer_name'] = $request->name;
             }//
             elseif ($product->type == ProductTypeEnum::NEED_ACCOUNT) {
-                $dataBill['customer_username'] =$request->id_user;
-                $dataBill['customer_password']= $request->name;
+                $dataBill['customer_username'] = $request->id_user;
+                $dataBill['customer_password'] = $request->name;
             } else {
                 $dataBill['customer_username'] = $request->id_user;
             }
-            $bill=Bill::create($dataBill);
+            $bill = Bill::create($dataBill);
 
             #########################3
             Balance::create([
@@ -348,7 +347,7 @@ class BillController extends Controller
                 'credit' => 0,
                 'info' => 'شراء منتج ' . $bill->amount . ' ' . $product->name,
                 'total' => auth()->user()->balance - $total_price,
-                'bill_id'=>$bill->id,
+                'bill_id' => $bill->id,
             ]);
 
 
@@ -371,13 +370,13 @@ class BillController extends Controller
                 } elseif ($product->api == 'as7ab') {
 
                     $service = new As7ab(getSettingsModel());
-                }elseif ($product->api == 'mazaya') {
+                } elseif ($product->api == 'mazaya') {
                     $service = new Mazaya(getSettingsModel());
-                }elseif ($product->api == 'cache-back') {
+                } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFree($bill);
-
+                $bill->save();
             } //
             elseif (!$product->is_free && $product->is_active_api && !$black) {
 
@@ -398,12 +397,13 @@ class BillController extends Controller
                 } elseif ($product->api == 'as7ab') {
 
                     $service = new As7ab(getSettingsModel());
-                }elseif ($product->api == 'mazaya') {
+                } elseif ($product->api == 'mazaya') {
                     $service = new Mazaya(getSettingsModel());
-                }elseif ($product->api == 'cache-back') {
+                } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFixed($bill);
+                $bill->save();
             }//
             try {
                 $bill->save();
@@ -571,7 +571,7 @@ class BillController extends Controller
                             'debit' => $product->getPrice(),
                             'credit' => 0,
                             'total' => auth()->user()->balance - $product->getPrice(),
-                            'bill_id'=>$bill->id,
+                            'bill_id' => $bill->id,
                         ]);
                         //
                         if (!$product->is_offer && auth()->user()->user != null) {
@@ -612,9 +612,9 @@ class BillController extends Controller
                         $service = new EkoCard(getSettingsModel());
                     } elseif ($product->api == 'as7ab') {
                         $service = new As7ab(getSettingsModel());
-                    }elseif ($product->api == 'mazaya') {
+                    } elseif ($product->api == 'mazaya') {
                         $service = new Mazaya(getSettingsModel());
-                    }elseif ($product->api == 'cache-back') {
+                    } elseif ($product->api == 'cache-back') {
                         $service = new CachBack(getSettingsModel());
                     }
                     // Bill Item From Api
@@ -636,7 +636,7 @@ class BillController extends Controller
                             'debit' => $product->getPrice(),
                             'credit' => 0,
                             'total' => auth()->user()->balance - $product->getPrice(),
-                            'bill_id'=>$bill->id,
+                            'bill_id' => $bill->id,
                         ]);
 
                         $bill = $service->buyFromApiFixed($bill);
@@ -738,7 +738,7 @@ class BillController extends Controller
                 'credit' => 0,
                 'info' => 'شراء منتج ' . $bill->amount . ' ' . $product->name,
                 'total' => auth()->user()->balance - $total_price,
-                'bill_id'=>$bill->id,
+                'bill_id' => $bill->id,
             ]);
 
             if ($product->is_free && $product->is_active_api && !$black) {
@@ -758,9 +758,9 @@ class BillController extends Controller
                     $service = new EkoCard(getSettingsModel());
                 } elseif ($product->api == 'as7ab') {
                     $service = new As7ab(getSettingsModel());
-                }elseif ($product->api == 'mazaya') {
+                } elseif ($product->api == 'mazaya') {
                     $service = new Mazaya(getSettingsModel());
-                }elseif ($product->api == 'cache-back') {
+                } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFree($bill);
@@ -783,9 +783,9 @@ class BillController extends Controller
                     $service = new EkoCard(getSettingsModel());
                 } elseif ($product->api == 'as7ab') {
                     $service = new As7ab(getSettingsModel());
-                }elseif ($product->api == 'mazaya') {
+                } elseif ($product->api == 'mazaya') {
                     $service = new Mazaya(getSettingsModel());
-                }elseif ($product->api == 'cache-back') {
+                } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFixed($bill);
