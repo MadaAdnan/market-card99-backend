@@ -217,6 +217,7 @@ class BillController extends Controller
                             'product_id' => $product->id,
                             'amount' => 1,
                         ]);
+                        $bill->save();
                         Balance::create([
                             'user_id' => auth()->id(),
                             'info' => 'شراء منتج ' . $product->name,
