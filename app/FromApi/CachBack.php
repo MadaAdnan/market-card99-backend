@@ -25,15 +25,13 @@ class CachBack implements PayByApi
         }
         $url = 'https://api.cashback-card.net/client/api/newOrder/' . $bill->product->codes_api['cache-back'] . '/params?qty=' . $bill->amount . '&order_uuid=' . $code . '&playerID=' . $bill->customer_id;
         $token = $this->setting->apis['cache-back'];
-        \Log::info($url);
-        \Log::info($token);
+
         $bill->save();
         try {
             $response = \Http::withHeaders([
                 'api-token' => $token
             ])->get($url);
-            \Log::error("Response Back");
-            \Log::info($response->body());
+
             sleep(1);
             if ($response->successful() && \Str::lower($response->json('status')) == 'ok' && $response->json('data')['status'] != 'not_available') {
                 $bill->api = $bill->product->api;
@@ -62,8 +60,7 @@ class CachBack implements PayByApi
             $response = \Http::withHeaders([
                 'api-token' => $token
             ])->get($url);
-            \Log::error("Response Back");
-            \Log::info($response->body());
+
             sleep(1);
             if (($response->successful() && \Str::lower($response->json('status')) == 'ok') || $response->json('data')['status'] != 'not_available') {
                 $bill->api = $bill->product->api;
