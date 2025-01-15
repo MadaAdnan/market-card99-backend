@@ -139,7 +139,7 @@ class BillResource extends Resource
                     }elseif($record->product->api =='cache-back') {
                         $service = new CachBack(getSettingsModel());
 
-                    }elseif ($$record->product->api == 'juneed') {
+                    }elseif ($record->product->api == 'juneed') {
                         $service = new Juneed(getSettingsModel());
                     }
                     $bill=$record;
