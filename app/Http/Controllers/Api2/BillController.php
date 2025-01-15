@@ -9,6 +9,7 @@ use App\FromApi\As7ab;
 use App\FromApi\CachBack;
 use App\FromApi\Drd3;
 use App\FromApi\EkoCard;
+use App\FromApi\Juneed;
 use App\FromApi\LifeCash;
 use App\FromApi\Mazaya;
 use App\FromApi\SaudCard;
@@ -202,6 +203,8 @@ class BillController extends Controller
                         $service = new Mazaya(getSettingsModel());
                     } elseif ($product->api == 'cache-back') {
                         $service = new CachBack(getSettingsModel());
+                    } elseif ($product->api == 'juneed') {
+                        $service = new Juneed(getSettingsModel());
                     }
 
                     // Bill Item From Api
@@ -376,6 +379,8 @@ info('BILL_@'.$bill->id);
                     $service = new Mazaya(getSettingsModel());
                 } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
+                }elseif ($product->api == 'juneed') {
+                    $service = new Juneed(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFree($bill);
                 $bill->save();
@@ -403,6 +408,8 @@ info('BILL_@'.$bill->id);
                     $service = new Mazaya(getSettingsModel());
                 } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
+                }elseif ($product->api == 'juneed') {
+                    $service = new Juneed(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFixed($bill);
                 $bill->save();
@@ -463,6 +470,10 @@ info('BILL_@'.$bill->id);
                     case 'cache-back':
                         $service = new CachBack($setting);
                         break;
+                    case 'juneed':
+                    $service = new Juneed($setting);
+                    break;
+
 
                 }
                 $service->checkStatus($bill);
@@ -619,6 +630,8 @@ info('BILL_@'.$bill->id);
                         $service = new Mazaya(getSettingsModel());
                     } elseif ($product->api == 'cache-back') {
                         $service = new CachBack(getSettingsModel());
+                    }elseif ($product->api == 'juneed') {
+                        $service = new Juneed(getSettingsModel());
                     }
                     // Bill Item From Api
                     \DB::beginTransaction();
@@ -767,6 +780,8 @@ info('BILL_@'.$bill->id);
                     $service = new Mazaya(getSettingsModel());
                 } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
+                }elseif ($product->api == 'juneed') {
+                    $service = new Juneed(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFree($bill);
 
@@ -792,6 +807,8 @@ info('BILL_@'.$bill->id);
                     $service = new Mazaya(getSettingsModel());
                 } elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
+                }elseif ($product->api == 'juneed') {
+                    $service = new Juneed(getSettingsModel());
                 }
                 $bill = $service->buyFromApiFixed($bill);
             }//
