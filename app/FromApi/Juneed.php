@@ -30,7 +30,8 @@ class Juneed implements PayByApi
             $response = \Http::withHeaders([
                 'api-token' => $token
             ])->get($url);
-
+            info('JUNEED ');
+            info($response->body());
             sleep(1);
             if ($response->successful() && \Str::lower($response->json('status')) == 'ok' && $response->json('data')['status'] != 'not_available') {
                 $bill->api = $bill->product->api;
@@ -59,6 +60,8 @@ class Juneed implements PayByApi
             $response = \Http::withHeaders([
                 'api-token' => $token
             ])->get($url);
+            info('JUNEED ');
+            info($response->body());
             sleep(1);
             if (($response->successful() && \Str::lower($response->json('status')) == 'ok') || $response->json('data')['status'] != 'not_available') {
                 $bill->api = $bill->product->api;
