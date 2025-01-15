@@ -29,6 +29,9 @@ class OrderWidget extends BaseWidget
         $life = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->whereNotNull('api_id')->where(function ($query) {
             return $query->whereNull('api')->orWhere('api', 'life-cash');
         })->whereBetween('created_at', [now()->startOfMonth(), now()])->sum('price');
+        $juneed = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->whereNotNull('api_id')->where(function ($query) {
+            return $query->whereNull('api')->orWhere('api', 'juneed');
+        })->whereBetween('created_at', [now()->startOfMonth(), now()])->sum('price');
         $eko = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->where('api', 'eko')->whereBetween('created_at', [now()->startOfMonth(), now()])->sum('price');
         $speed = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->where('api', 'speed-card')->whereBetween('created_at', [now()->startOfMonth(), now()])->sum('price');
 
@@ -36,6 +39,7 @@ class OrderWidget extends BaseWidget
             BaseWidget\Card::make(' مبيعات المنتجات',$bill)->extraAttributes(['style'=>'background-color:'.fake()->hexColor]),
             BaseWidget\Card::make('مبيعات الأرقام',$orders)->extraAttributes(['style'=>'background-color:'.fake()->hexColor]),
             BaseWidget\Card::make('مبيعات LifeCash',$life)->extraAttributes(['style'=>'background-color:'.fake()->hexColor]),
+            BaseWidget\Card::make('مبيعات juneed',$juneed)->extraAttributes(['style'=>'background-color:'.fake()->hexColor]),
             BaseWidget\Card::make('مبيعات Speed',$speed)->extraAttributes(['style'=>'background-color:'.fake()->hexColor]),
             BaseWidget\Card::make(' مبيعات EKO',$eko)->extraAttributes(['style'=>'background-color:'.fake()->hexColor]),
             ];

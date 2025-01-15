@@ -63,6 +63,7 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('count')->label('كمية الطلب من API')->required(),
                         Forms\Components\Radio::make('api')->options([
                             'life-cash' => 'لايف كاش',
+                            'juneed' => 'جنيد',
                             'speed-card' => 'سبيد كارد',
                             'eko' => 'إيكو',
                             'drd3' => 'DRD3',
@@ -81,6 +82,7 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('codes_api.as7ab')->label('كود أصحاب'),
                         Forms\Components\TextInput::make('codes_api.mazaya')->label('كود مزايا'),
                         Forms\Components\TextInput::make('codes_api.cache-back')->label('كود كاش باك'),
+                        Forms\Components\TextInput::make('codes_api.juneed')->label('كود جنيد'),
                     ])->columns(1)->visible(fn($get) => $get('is_active_api') == true),
                     Forms\Components\Toggle::make('is_discount')->label('حالة العرض'),
                     Forms\Components\Toggle::make('is_offer')->label('البيع بسعر التكلفة'),
@@ -123,6 +125,7 @@ class ProductResource extends Resource
 
                 Tables\Filters\SelectFilter::make('api')->options([
                     'life-cash' => 'لايف كاش',
+                    'juneed' => 'جنيد',
                     'speed-card' => 'سبيد كارد',
                     'eko' => 'إيكو',
                     'drd3' => 'DRD3',

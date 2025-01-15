@@ -21,6 +21,7 @@ class LifeCashPage extends Page
     public $data = [];
     public $type = [
         'life-cash' => 'منتجات LifeCash ',
+        'juneed' => 'منتجات جنيد ',
         'speed-card' => 'منتجات SpeedCard',
         'eko' => 'منتجات Eko',
         'drd3' => 'منتجات DRD3',
@@ -95,6 +96,10 @@ class LifeCashPage extends Page
                 $url = 'https://api.cashback-card.net/client/api/products';
                 $token = isset($this->setting->apis['cache-back'])?$this->setting->apis['cache-back']:'';
                 break;
+            case 'juneed':
+                $url = 'https://api.jneedcontur.net/client/api/products';
+                $token = $this->setting->apis['juneed'];
+                break;
 
         }
 
@@ -102,6 +107,7 @@ class LifeCashPage extends Page
         ##################
 $array1=['life-cash',
     'speed-card',
+    'juneed',
 'eko',
 'saud',
 'cache-back',];

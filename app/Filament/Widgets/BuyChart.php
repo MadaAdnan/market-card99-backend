@@ -71,6 +71,10 @@ class BuyChart extends ApexChartWidget
         $life = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->whereNotNull('api_id')->where(function ($query) {
             return $query->whereNull('api')->orWhere('api', 'life-cash');
         })->whereBetween('created_at', [Carbon::parse($this->filterFormData['date_start']), Carbon::parse($this->filterFormData['date_end'])])->sum('price');
+        $juneed = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->whereNotNull('api_id')->where(function ($query) {
+            return $query->whereNull('api')->orWhere('api', 'juneed');
+        })->whereBetween('created_at', [Carbon::parse($this->filterFormData['date_start']), Carbon::parse($this->filterFormData['date_end'])])->sum('price');
+
         $eko = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->where('api', 'eko')->whereBetween('created_at', [Carbon::parse($this->filterFormData['date_start']), Carbon::parse($this->filterFormData['date_end'])])->sum('price');
         $speed = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->where('api', 'speed-card')->whereBetween('created_at', [Carbon::parse($this->filterFormData['date_start']), Carbon::parse($this->filterFormData['date_end'])])->sum('price');
         $drd3 = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->where(fn($query) => $query->where('api', 'drd3')->orWhere('api', 'cash-mm'))->whereBetween('created_at', [Carbon::parse($this->filterFormData['date_start']), Carbon::parse($this->filterFormData['date_end'])])->sum('price');
@@ -81,6 +85,7 @@ class BuyChart extends ApexChartWidget
             'product' => ' مبيعات المنتجات',
             'number' => 'مبيعات الأرقام',
             'life-cash' => 'مبيعات LifeCash',
+            'juneed' => 'مبيعات juneed',
             'eko' => 'مبيعات EKO',
             'speed' => 'مبيعات Speed',
             'drd3' => 'مبيعات DRD & CashSmm',
@@ -92,6 +97,7 @@ class BuyChart extends ApexChartWidget
             'product' => $bill,
             'number' => $orders,
             'life-cash' => $life,
+            'juneed' => $juneed,
             'eko' => $eko,
             'speed' => $speed,
             'drd3' => $drd3,

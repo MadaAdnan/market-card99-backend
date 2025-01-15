@@ -52,6 +52,7 @@ class SettingResource extends Resource
                                 Forms\Components\TextInput::make('apis.as7ab')->label('أصحاب API'),
                                 Forms\Components\TextInput::make('apis.mazaya')->label('مزايا API'),
                                 Forms\Components\TextInput::make('apis.cache-back')->label('كاش باك API'),
+                                Forms\Components\TextInput::make('apis.juneed')->label('جنيد API'),
                             ]),
 
                             Forms\Components\Wizard\Step::make('نسب الربح والحسم')->schema([
