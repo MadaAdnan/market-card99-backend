@@ -24,7 +24,7 @@ class Juneed implements PayByApi
             return $bill;
         }
         $url = 'https://api.jneedcontur.net/client/api/newOrder/' . $bill->product->code . '/params?qty=' . $bill->amount . '&order_uuid=' . $code . '&playerID=' . $bill->customer_id;
-        $token = $this->setting->apis['life'];
+        $token = $this->setting->apis['juneed'];
         $bill->save();
         try {
             $response = \Http::withHeaders([
@@ -53,7 +53,7 @@ class Juneed implements PayByApi
         }
         $url = 'https://api.jneedcontur.net/client/api/newOrder/' . $bill->product->code . '/params?qty=' . $bill->product->count . '&order_uuid=' . $code . '&playerID=' . $bill->customer_id;
 
-        $token = $this->setting->apis['life'];
+        $token = $this->setting->apis['juneed'];
         $bill->save();
         try {
             $response = \Http::withHeaders([
@@ -74,7 +74,7 @@ class Juneed implements PayByApi
     public function checkStatus(Bill $bill): Bill
     {
         $url = 'https://api.jneedcontur.net/client/api/check?orders=[' . $bill->api_id . ']';
-        $token = $this->setting->apis['life'];
+        $token = $this->setting->apis['juneed'];
         $response = \Http::withHeaders([
             'api-token' => $token
         ])->get($url);
