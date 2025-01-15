@@ -37,6 +37,9 @@ class Juneed implements PayByApi
                 $bill->api = $bill->product->api;
                 $bill->api_id = $response->json('data')['order_id'];
             }//
+           /* elseif(isset($response->json()['msg']['status']) && $response->json()['msg']['status']=='not_available'){
+
+            }*/
 
 
             return $bill;
