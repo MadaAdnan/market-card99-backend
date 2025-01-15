@@ -7,6 +7,7 @@ use App\FromApi\As7ab;
 use App\FromApi\CachBack;
 use App\FromApi\Drd3;
 use App\FromApi\EkoCard;
+use App\FromApi\Juneed;
 use App\FromApi\LifeCash;
 use App\FromApi\Mazaya;
 use App\FromApi\PayByApi;
@@ -68,6 +69,9 @@ class CompleteOrderCommand extends Command
                     break;
                 case 'cache-back':
                     $service = new CachBack($setting);
+                    break;
+                    case 'juneed':
+                    $service = new Juneed($setting);
                     break;
             }
             /**

@@ -7,6 +7,7 @@ use App\Enums\ProductTypeEnum;
 use App\FromApi\As7ab;
 use App\FromApi\CachBack;
 use App\FromApi\EkoCard;
+use App\FromApi\Juneed;
 use App\FromApi\LifeCash;
 use App\FromApi\Mazaya;
 use App\FromApi\SaudCard;
@@ -228,6 +229,8 @@ class BillController extends Controller
                     $service = new Mazaya(getSettingsModel());
                 }elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
+                }elseif ($product->api == 'juneed') {
+                    $service = new Juneed(getSettingsModel());
                 }
                 $service->buyFromApiFree($bill);
 
@@ -250,6 +253,8 @@ class BillController extends Controller
                     $service = new Mazaya(getSettingsModel());
                 }elseif ($product->api == 'cache-back') {
                     $service = new CachBack(getSettingsModel());
+                }elseif ($product->api == 'juneed') {
+                    $service = new Juneed(getSettingsModel());
                 }
                 $service->buyFromApiFixed($bill);
             }//

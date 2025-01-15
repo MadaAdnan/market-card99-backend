@@ -9,6 +9,7 @@ use App\FromApi\As7ab;
 use App\FromApi\CachBack;
 use App\FromApi\Drd3;
 use App\FromApi\EkoCard;
+use App\FromApi\Juneed;
 use App\FromApi\LifeCash;
 use App\FromApi\Mazaya;
 use App\FromApi\SaudCard;
@@ -104,6 +105,7 @@ class BillResource extends Resource
                 ])->default(BillStatusEnum::PENDING->value),
                 Tables\Filters\SelectFilter::make('api')->label('Api')->searchable()->options([
                     'life-cash' => 'لايف كاش',
+                    'juneed' => 'جنييد',
                     'eko' => 'إيكو',
                     'speed-card' => 'سبيد كارد',
                     'saud' => 'سعود',
@@ -137,6 +139,8 @@ class BillResource extends Resource
                     }elseif($record->product->api =='cache-back') {
                         $service = new CachBack(getSettingsModel());
 
+                    }elseif ($$record->product->api == 'juneed') {
+                        $service = new Juneed(getSettingsModel());
                     }
                     $bill=$record;
                     \DB::beginTransaction();
