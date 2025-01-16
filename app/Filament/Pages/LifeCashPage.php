@@ -99,7 +99,7 @@ class LifeCashPage extends Page
             case 'juneed':
                 $url = 'https://api.jneedcontur.net/client/api/products';
                 $token = $this->setting->apis['juneed'];
-                dd($url);
+
                 break;
 
         }
