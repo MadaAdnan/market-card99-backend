@@ -23,7 +23,7 @@ class Juneed implements PayByApi
         if ($code == null) {
             return $bill;
         }
-        $url = 'https://api.jneedcontur.net/client/api/newOrder/' . $bill->product->code . '/params?qty=' . $bill->amount . '&order_uuid=' . $code . '&playerID=' . $bill->customer_id;
+        $url = 'https://api.jneedcontur.net/client/api/newOrder/' . $bill->product->codes_api['juneed'] . '/params?qty=' . $bill->amount . '&order_uuid=' . $code . '&playerID=' . $bill->customer_id;
         $token = $this->setting->apis['juneed'];
         $bill->save();
         try {
@@ -55,7 +55,7 @@ class Juneed implements PayByApi
         if ($code == null) {
             return $bill;
         }
-        $url = 'https://api.jneedcontur.net/client/api/newOrder/' . $bill->product->code . '/params?qty=' . $bill->product->count . '&order_uuid=' . $code . '&playerID=' . $bill->customer_id;
+        $url = 'https://api.jneedcontur.net/client/api/newOrder/' . $bill->product->codes_api['juneed'] . '/params?qty=' . $bill->product->count . '&order_uuid=' . $code . '&playerID=' . $bill->customer_id;
 
         $token = $this->setting->apis['juneed'];
         $bill->save();
