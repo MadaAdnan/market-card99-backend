@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\ActivateStatusBoolEnum;
+use App\Enums\CurrencyEnum;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Jobs\OneSignalAllUserJob;
@@ -111,7 +112,7 @@ class ProductResource extends Resource
                     'phone' => 'رقم هاتف',
                     'url' => 'رابط ',
                 ])->label('نوع المنتج')->sortable()->disableClick(),
-
+                Tables\Columns\BadgeColumn::make('currency')->formatStateUsing(fn($state)=>CurrencyEnum::tryFrom($state)?->status())->label('العملة')->disableClick(),
                 Tables\Columns\TextColumn::make('cost')->label('سعر التكلفة')->disableClick(),
                 Tables\Columns\ToggleColumn::make('active')->label('الحالة')->disableClick(),
 //                Tables\Columns\ToggleColumn::make('is_available')->label('متوفر')->disableClick()-,
