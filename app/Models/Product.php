@@ -93,8 +93,7 @@ class Product extends Model implements HasMedia
 
         if ($this->currency->value == CurrencyEnum::TR->value) {
             $cost = number_format((float)($this->cost / Setting::first()?->usd_price ?? 1), 2);
-        }
-        if ($this->currency->value == CurrencyEnum::SYR->value) {
+        }elseif ($this->currency->value == CurrencyEnum::SYR->value) {
             $cost = number_format((float)($this->cost / Setting::first()?->usd_price_syr ?? 1), 2);
         } else {
             $cost = $this->cost;
