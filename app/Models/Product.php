@@ -93,6 +93,9 @@ class Product extends Model implements HasMedia
 
         if ($this->currency->value == CurrencyEnum::TR->value) {
             $cost = number_format((float)($this->cost / Setting::first()?->usd_price ?? 1), 2);
+        }
+        if ($this->currency->value == CurrencyEnum::SYR->value) {
+            $cost = number_format((float)($this->cost / Setting::first()?->usd_price_syr ?? 1), 2);
         } else {
             $cost = $this->cost;
         }
@@ -104,7 +107,7 @@ class Product extends Model implements HasMedia
 
     public function getPrice($user = null)
     {
-        if (!auth()->check() && $user===null) {
+        if (!auth()->check() && $user === null) {
             return 0;
         }
         if ($user === null) {
@@ -122,8 +125,7 @@ class Product extends Model implements HasMedia
             $cost = $this->total_cost + ($this->total_cost * auth()->user()->group->price);
 
             return $cost;
-        }
-        else {
+        } else {
 
             if ($this->is_offer) {
                 return $this->total_cost;

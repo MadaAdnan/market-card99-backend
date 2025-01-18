@@ -56,7 +56,8 @@ class SettingResource extends Resource
                             ]),
 
                             Forms\Components\Wizard\Step::make('نسب الربح والحسم')->schema([
-                                Forms\Components\TextInput::make('usd_price')->label('سعر الدولار')->numeric()->required(),
+                                Forms\Components\TextInput::make('usd_price')->label('سعر الدولار  بالتركي')->numeric()->required(),
+                                Forms\Components\TextInput::make('usd_price_syr')->label('سعر الدولار بالسوري')->numeric()->required(),
 //                                Forms\Components\TextInput::make('win_sim90_ratio')->label('نسبة الربح من Sim90')->numeric()->required(),
                                 /*Forms\Components\Radio::make('is_active_sim90')->options([
                                     'active' => 'مفعل',

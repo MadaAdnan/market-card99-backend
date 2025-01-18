@@ -40,7 +40,8 @@ class ProductResource extends Resource
                     Forms\Components\Textarea::make('info')->label('وصف المنتج'),
                     Forms\Components\Radio::make('currency')->options([
                         'usd' => 'دولار',
-                        'tr' => 'ليرة تركية'
+                        'tr' => 'ليرة تركية',
+                        'syr'=>'ليرة سورية'
                     ])->label('العملة')->inline()->required()->default('usd'),
                     Forms\Components\TextInput::make('cost')->label('سعر التكلفة')->numeric()->required()->step(0.001),
 
