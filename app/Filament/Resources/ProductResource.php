@@ -111,11 +111,7 @@ class ProductResource extends Resource
                     'phone' => 'رقم هاتف',
                     'url' => 'رابط ',
                 ])->label('نوع المنتج')->sortable()->disableClick(),
-                Tables\Columns\BadgeColumn::make('currency')->enum([
-                    'usd' => 'دولار',
-                    'tr' => 'ليرة تركية',
-                    'syr'=>'ليرة سورية'
-                ])->label('العملة')->disableClick(),
+
                 Tables\Columns\TextColumn::make('cost')->label('سعر التكلفة')->disableClick(),
                 Tables\Columns\ToggleColumn::make('active')->label('الحالة')->disableClick(),
 //                Tables\Columns\ToggleColumn::make('is_available')->label('متوفر')->disableClick()-,
