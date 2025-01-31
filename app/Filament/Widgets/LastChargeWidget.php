@@ -66,7 +66,7 @@ protected function getTableRecordsPerPageSelectOptions(): array
             TextColumn::make('credit')->label('الشحن'),
             TextColumn::make('debit')->label('السحب'),
             TextColumn::make('info')->label('البيان'),
-            TextColumn::make('created_at')->since()->label('منذ'),
+            TextColumn::make('created_at')->date('Y-m-d H:i')->label('التاريخ'),
         ];
     }
 }
