@@ -43,6 +43,7 @@ class BalanceResource extends Resource
                 Tables\Columns\TextColumn::make('info')->label('البيان')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('user.username')->label('الزبون')->sortable(),
                 Tables\Columns\TextColumn::make('user.email')->label('الزبون')->sortable(),
+                Tables\Columns\TextColumn::make('bill.uuid')->label('رقم الطلب'),
                 Tables\Columns\TextColumn::make('created_at')->since()->label('منذ')->sortable(),
             ])->defaultSort('created_at','desc')
             ->filters([

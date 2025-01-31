@@ -33,6 +33,7 @@ class BalancesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('debit')->label('سحب'),
                 Tables\Columns\TextColumn::make('total')->label('الرصيد'),
                 Tables\Columns\TextColumn::make('info')->label('البيان'),
+                Tables\Columns\TextColumn::make('bill.uuid')->label('رقم الطلب'),
                 Tables\Columns\TextColumn::make('created_at')->date('Y-m-d')->label('التاريخ'),
             ])->defaultSort('created_at', 'desc')
             ->filters([
