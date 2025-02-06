@@ -50,7 +50,7 @@ class UserResource extends Resource
                     Forms\Components\Toggle::make('active')->label('الحالة')->visible(auth()->user()->hasRole('super_admin')),
                     Forms\Components\Select::make('user_id')->options(User::whereHas('roles', fn($q) => $q->where('name', 'partner'))->pluck('name', 'id')->toArray())->searchable()->label('الوكيل')->visible(auth()->user()->hasRole('super_admin')),
                     Forms\Components\Select::make('group_id')->options(Group::selectRaw('id,price,sort,concat(name," (",ratio_delegate*100,"% )") as name')->orderBy('price')->when(!auth()->user()->hasRole('super_admin'),
-                        fn($q) => $q->where('sort', '<', auth()->user()->group->sort))->pluck('name', 'id')->toArray())->searchable()->label('الفئة'),
+                        fn($q) => $q->where('sort', '<', auth()->user()->group?->sort))->pluck('name', 'id')->toArray())->searchable()->label('الفئة'),
                     Forms\Components\CheckboxList::make('roles')->relationship('roles', 'name')->label('الصلاحيات')->visible(auth()->user()->hasRole('super_admin')),
 //                    Forms\Components\Toggle::make('is_show')->label('وكيل معتمد')->visible(auth()->user()->hasRole('super_admin')),
                     Forms\Components\Toggle::make('is_affiliate')->label('تفعيل الربح من الإحالة')->visible(auth()->user()->hasRole('super_admin')),
