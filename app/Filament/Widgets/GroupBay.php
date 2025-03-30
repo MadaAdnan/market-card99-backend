@@ -57,9 +57,11 @@ class GroupBay extends ApexChartWidget
     {
         //$bill = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->whereBetween('created_at', [Carbon::parse($this->filterFormData['date_start']), Carbon::parse($this->filterFormData['date_end'])])->sum('price');
 
-        $trend = Trend::query(Order::where('status', OrderStatusEnum::COMPLETE->value)->when($this->filterFormData['group'],fn($q)=>$q->whereHas('user',fn($query)=>$query
-            ->whereHas('group',fn($q)=>$q->where('groups.id',$this->filterFormData['group']))
-        ))
+        $trend = Trend::query(Order::where('status', OrderStatusEnum::COMPLETE->value)
+            ->when($this->filterFormData['group'], function ($query) {
+                $groupId = $this->filterFormData['group'];
+                $query->whereHas('user.group', fn($q) => $q->where('groups.id', $groupId));
+            })
     )
             ->between(
                 start: now()->startOfYear(),
