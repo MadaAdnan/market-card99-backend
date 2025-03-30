@@ -7,6 +7,7 @@ use App\Enums\OrderStatusEnum;
 use App\Models\Bill;
 use App\Models\Group;
 use App\Models\Order;
+use App\Models\User;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -56,12 +57,9 @@ class GroupBay extends ApexChartWidget
     protected function getOptions(): array
     {
         //$bill = Bill::orWhere('status', [BillStatusEnum::COMPLETE->value, BillStatusEnum::SUCCESS->value])->whereBetween('created_at', [Carbon::parse($this->filterFormData['date_start']), Carbon::parse($this->filterFormData['date_end'])])->sum('price');
-
+$userIds=Group::find($this->filterFormData['group'])?->users->pluck('id')->toArray();
         $trend = Trend::query(Order::where('status', OrderStatusEnum::COMPLETE->value)
-            ->when($this->filterFormData['group'], function ($query) {
-                $groupId = $this->filterFormData['group'];
-                $query->whereHas('user.group', fn($q) => $q->where('groups.id', $groupId));
-            })
+            ->when(count($userIds)>0, fn ($query)=>  $query->whereIn('user_id',$userIds))
     )
             ->between(
                 start: now()->startOfYear(),
