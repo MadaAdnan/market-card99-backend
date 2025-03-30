@@ -62,18 +62,10 @@ $group=Group::find($this->filterFormData['group']);
 if($group!=null){
     $userIds=$group->users->pluck('id')->toArray();
 }
-        $trend = Trend::query(Order::where('status', OrderStatusEnum::COMPLETE->value)
-            ->when(count($userIds)>0, fn ($query)=>  $query->whereIn('user_id',$userIds))
-            ->selectRaw('created_at,Sum(price - cost) as price')
-    )
-            ->between(
-                start: now()->startOfYear(),
-                end: now()->endOfYear(),
-            )
-            ->perMonth()
-            ->sum('price');
+
         $trend2 = Trend::query(Bill::where('status', OrderStatusEnum::COMPLETE->value)
             ->when(count($userIds)>0, fn ($query)=>  $query->whereIn('user_id',$userIds))
+
 
         )
             ->between(
