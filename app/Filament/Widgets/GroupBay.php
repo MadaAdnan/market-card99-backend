@@ -87,15 +87,12 @@ if($group!=null){
             ],
             'series' => [
                 [
-                    'name' => 'الارقام',
-                    'data' => $trend->map(fn (TrendValue $value) => $value->aggregate),
-                ], [
                     'name' => 'المشتريات',
                     'data' => $trend2->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
             'xaxis' => [
-                'categories' =>$trend->map(fn (TrendValue $value) => $value->date),
+                'categories' =>$trend2->map(fn (TrendValue $value) => $value->date),
                 'labels' => [
                     'style' => [
                         'colors' => '#9ca3af',
