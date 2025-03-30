@@ -72,6 +72,16 @@ if($group!=null){
             )
             ->perMonth()
             ->sum('price');
+        $trend2 = Trend::query(Bill::where('status', OrderStatusEnum::COMPLETE->value)
+            ->when(count($userIds)>0, fn ($query)=>  $query->whereIn('user_id',$userIds))
+            ->selectRaw('created_at,Sum(price - cost) as price')
+        )
+            ->between(
+                start: now()->startOfYear(),
+                end: now()->endOfYear(),
+            )
+            ->perMonth()
+            ->sum('price');
 
 
 
@@ -85,8 +95,11 @@ if($group!=null){
             ],
             'series' => [
                 [
-                    'name' => 'BuyChart',
+                    'name' => 'الارقام',
                     'data' => $trend->map(fn (TrendValue $value) => $value->aggregate),
+                ], [
+                    'name' => 'المشتريات',
+                    'data' => $trend2->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
             'xaxis' => [
