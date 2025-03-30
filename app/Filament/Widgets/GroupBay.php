@@ -49,7 +49,7 @@ class GroupBay extends ApexChartWidget
     protected function getFormSchema(): array
     {
         return [
-            Select::make('group')->options(Group::pluck('groups.name','groups.id'))->multiple()->label('الفئة'),
+            Select::make('group')->options(Group::pluck('groups.name','groups.id'))->label('الفئة'),
         ];
     }
 
