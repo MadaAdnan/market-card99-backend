@@ -119,7 +119,7 @@ if($group!=null){
                     ],
                 ],
             ],
-            'colors' => ['#6366f1',fake()->hexColor],
+            'colors' => ['#6366f1','#FFFF88'],
             'fill' => [
                 'type' => 'gradient',
                 'gradient' => [
