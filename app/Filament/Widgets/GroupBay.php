@@ -22,14 +22,14 @@ class GroupBay extends ApexChartWidget
      *
      * @var string
      */
-    protected static string $chartId = 'buyChart';
+    protected static string $chartId = 'buyChartGroup';
 
     /**
      * Widget Title
      *
      * @var string|null
      */
-    protected static ?string $heading = 'مشتريات الفئات';
+    protected static ?string $heading = 'أرباح الفئات';
     public ?string $filter = 'date';
     protected int|string|array $columnSpan = [
         'md' => 2,
@@ -73,7 +73,7 @@ if($group!=null){
                 end: now()->endOfYear(),
             )
             ->perMonth()
-            ->sum('price');
+            ->sum('wins');
 
 
 
