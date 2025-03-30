@@ -64,14 +64,14 @@ if($group!=null){
 }
         $trend = Trend::query(Order::where('status', OrderStatusEnum::COMPLETE->value)
             ->when(count($userIds)>0, fn ($query)=>  $query->whereIn('user_id',$userIds))
-            ->selectRaw('*,Sum(price - cost) as total')
+            ->selectRaw('created_at,Sum(price - cost) as price')
     )
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
             )
             ->perMonth()
-            ->sum('total');
+            ->sum('price');
 
 
 
