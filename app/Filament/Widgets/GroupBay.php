@@ -9,6 +9,7 @@ use App\Models\Group;
 use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
+use DB;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Flowframe\Trend\Trend;
@@ -74,14 +75,14 @@ if($group!=null){
             ->sum('price');
         $trend2 = Trend::query(Bill::where('status', OrderStatusEnum::COMPLETE->value)
             ->when(count($userIds)>0, fn ($query)=>  $query->whereIn('user_id',$userIds))
-            ->selectRaw('*,Sum(price - cost) as total')
+            ->addSelect(DB::raw('(price - cost) as profit'))
         )
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
             )
             ->perMonth()
-            ->sum('total');
+            ->sum('profit');
 
 
 
