@@ -81,11 +81,11 @@ class GroupBay extends ApexChartWidget
             'series' => [
                 [
                     'name' => 'BuyChart',
-                    'data' =>$trend->map(fn (TrendValue $value) => $value->date) ,
+                    'data' => $trend->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
             'xaxis' => [
-                'categories' =>$trend->map(fn (TrendValue $value) => $value->aggregate),
+                'categories' =>$trend->map(fn (TrendValue $value) => $value->date),
                 'labels' => [
                     'style' => [
                         'colors' => '#9ca3af',
