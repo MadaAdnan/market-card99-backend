@@ -74,7 +74,7 @@ if($group!=null){
             ->sum('price');
         $trend2 = Trend::query(Bill::where('status', OrderStatusEnum::COMPLETE->value)
             ->when(count($userIds)>0, fn ($query)=>  $query->whereIn('user_id',$userIds))
-            ->selectRaw('created_at,Sum(price - cost) as price')
+
         )
             ->between(
                 start: now()->startOfYear(),
