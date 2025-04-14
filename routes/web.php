@@ -91,7 +91,7 @@ require __DIR__ . '/auth.php';*/
 /*Route::any('{name}',function(){
     return redirect('https://market-card99.com');
 })->where('name','(?!admin).*');*/
-Route::get('/getProduct/', function ($id) {
+Route::get('/getProduct/', function () {
     $response = Http::withToken('d6b1a1713b76d45811427a546bf2e6cf')->get('https://as7abcard.com/api/v1/products');
     if ($response->successful()) {
         return $response->json();
