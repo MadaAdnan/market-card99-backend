@@ -91,8 +91,13 @@ require __DIR__ . '/auth.php';*/
 /*Route::any('{name}',function(){
     return redirect('https://market-card99.com');
 })->where('name','(?!admin).*');*/
-Route::get('/getProduct/', function () {
-    $response = Http::withToken('d6b1a1713b76d45811427a546bf2e6cf')->get('https://as7abcard.com/api/v1/products');
+Route::get('/getProduct/{id?}', function ($id=null) {
+    if($id==null){
+        $response = Http::withToken('d6b1a1713b76d45811427a546bf2e6cf')->get('https://as7abcard.com/api/v1/products');
+    }else{
+        $response = Http::withToken('d6b1a1713b76d45811427a546bf2e6cf')->get('https://as7abcard.com/api/v1/products/'.$id);
+    }
+
     if ($response->successful()) {
         return $response->json();
     }
