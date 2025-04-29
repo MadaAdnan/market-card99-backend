@@ -105,7 +105,7 @@ class BillController extends Controller
                     'total' => $product->getPrice() * $request->count
                 ]);
                 $item = Item::active()->where('product_id', $product->id)->first();
-                if ($item || ($item==0 && $product->force_available)) {
+                if ($item ) {
                     \DB::beginTransaction();
                     try {
                         $data = [
