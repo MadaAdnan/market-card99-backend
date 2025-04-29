@@ -122,9 +122,7 @@ class BillController extends Controller
                         ];
                         if (!$product->is_offer && auth()->user()->user != null) {
                             $ratio = ($product->total_cost * auth()->user()->group->ratio_delegate);
-                            if(auth()->id()==4736){
-                                throw new \Exception("Total => {$product->total_cost} and ".auth()->user()->group->ratio_delegate);
-                            }
+
                             $data['ratio'] = $ratio;
                         } elseif (!$product->is_offer && auth()->user()->affiliate_user != null) {
                             $ratio = ($product->total_cost * getSettings('affiliate_ratio'));
