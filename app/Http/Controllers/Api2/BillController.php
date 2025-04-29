@@ -113,7 +113,7 @@ class BillController extends Controller
                             'id_bill' => Str::random(),
                             'price' => $product->getPrice(),
                             'ratio' => 0,
-                            'status' => $item>0 ?BillStatusEnum::COMPLETE->value:BillStatusEnum::PENDING->value,
+                            'status' =>BillStatusEnum::COMPLETE->value,
                             'category_id' => $product->category_id,
                             'cost' => $product->total_cost,
                             'invoice_id' => $invoice->id,
