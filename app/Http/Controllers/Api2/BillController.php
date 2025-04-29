@@ -83,14 +83,7 @@ class BillController extends Controller
         }
         $product = Product::find($request->product_id);
 
-        if(auth()->id()==4736){
-            $ratio = ($product->total_cost * auth()->user()->group->ratio_delegate);
-            info("BILL");
-            info($product->total_cost);
-            info(auth()->user()->group->ratio_delegate);
-            info($ratio);
-            info("End");
-        }
+
         if (!$product || !$product->is_available || !$product->active || !$product->category->is_available || !$product->category->active) {
             return HelperSupport::SendError('خطأ في الطلب', 'المنتج غير متوفر حاليا');
         }
