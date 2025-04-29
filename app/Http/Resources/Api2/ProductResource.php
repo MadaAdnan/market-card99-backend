@@ -41,7 +41,7 @@ class ProductResource extends JsonResource
     {
         if ($this->type->value == 'default' && !$this->is_active_api) {
             $count = Item::where(['product_id' => $this->id, 'active' => 1])->count();
-            if (!$count && !$this->force_available) {
+            if ($count==0 && !$this->force_available) {
                 return false;
             }
         }
