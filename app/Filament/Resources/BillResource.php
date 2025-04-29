@@ -83,10 +83,16 @@ class BillResource extends Resource
                 Tables\Columns\TextColumn::make('amount')->label('الكمية')->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap;font-size:13px'])->toggleable(),
                 Tables\Columns\TextColumn::make('customer_note')->label('ملاحظات الزبون')->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap;font-size:13px'])->toggleable()->size('sm'),
 
-                Tables\Columns\BadgeColumn::make('status')->formatStateUsing(fn($record) => $record->status->status())->color(fn($record) => $record->status->color())->label('الحالة')->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap;font-size:13px'])->size('sm'),
+                Tables\Columns\BadgeColumn::make('status')
+                    ->formatStateUsing(fn($record) => $record->status->status())->color(fn($record) => $record->status->color())
+                    ->label('الحالة')->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap;font-size:13px'])
+                    ->size('sm'),
 
-                Tables\Columns\TextColumn::make('created_at')->date('Y-m-d h:i a')->label('تاريخ الطلب')->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap;font-size:13px'])->toggleable()->size('sm'),
-                Tables\Columns\TextColumn::make('api_id')->label('Api-NO')->searchable(isIndividual: true)->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap'])
+                Tables\Columns\TextColumn::make('created_at')->date('Y-m-d h:i a')
+                    ->label('تاريخ الطلب')->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap;font-size:13px'])
+                    ->toggleable()->size('sm'),
+                Tables\Columns\TextColumn::make('api_id')->label('Api-NO')
+                    ->searchable(isIndividual: true)->extraCellAttributes(['class' => 'border','style'=>'text-wrap:wrap'])
                     ->description(fn($record)=>'الموقع : '.$record->api)->size('sm')
                     ->toggleable()->visible(auth()->user()->hasRole('super_admin')),
 //                Tables\Columns\TextColumn::make('api')->label('Api')->extraCellAttributes(['class' => 'border'])->toggleable()->visible(auth()->user()->hasRole('super_admin')),
@@ -116,7 +122,8 @@ class BillResource extends Resource
             ])
             ->actions([
                 ################ Retry Api ######################
-                Tables\Actions\Action::make('api')->requiresConfirmation()->label('إعادة الطلب من Api')->action(function ($record) {
+                Tables\Actions\Action::make('api')->requiresConfirmation()->label('إعادة الطلب من Api')
+                    ->action(function ($record) {
                     if ($record->product->api == 'life-cash') {
                         $service = new LifeCash(getSettingsModel());
                     }//
