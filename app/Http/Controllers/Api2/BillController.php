@@ -199,7 +199,7 @@ class BillController extends Controller
                             'cost' => $product->total_cost,
                             'invoice_id' => $invoice->id,
                             'product_id' => $product->id,
-                            'data_id' => $item->code,
+                            'data_id' => '',
                         ];
                         if (!$product->is_offer && auth()->user()->user != null) {
                             $ratio = ($product->total_cost * auth()->user()->group->ratio_delegate);
