@@ -186,6 +186,88 @@ class BillController extends Controller
                         HelperSupport::SendError('خطأ في الطلب', $e->getMessage());
                     }
                 } //
+                elseif($item==0 && !$product->is_active_api){
+                    \DB::beginTransaction();
+                    try {
+                        $data = [
+                            'user_id' => auth()->id(),
+                            'id_bill' => Str::random(),
+                            'price' => $product->getPrice(),
+                            'ratio' => 0,
+                            'status' => BillStatusEnum::PENDING->value,
+                            'category_id' => $product->category_id,
+                            'cost' => $product->total_cost,
+                            'invoice_id' => $invoice->id,
+                            'product_id' => $product->id,
+                            'data_id' => $item->code,
+                        ];
+                        if (!$product->is_offer && auth()->user()->user != null) {
+                            $ratio = ($product->total_cost * auth()->user()->group->ratio_delegate);
+
+                            $data['ratio'] = $ratio;
+                        } elseif (!$product->is_offer && auth()->user()->affiliate_user != null) {
+                            $ratio = ($product->total_cost * getSettings('affiliate_ratio'));
+                            $data['ratio'] = $ratio;
+                        }
+                        $data['ratio']=auth()->user()->group->ratio_delegate*$ratio;
+                        $bill = Bill::create($data);
+
+                        $item->update([
+                            'bill_id' => $bill->id,
+                            'active' => 0,
+                        ]);
+                        Balance::create([
+                            'user_id' => auth()->id(),
+                            'info' => 'شراء منتج ' . $product->name,
+                            'debit' => $product->getPrice(),
+                            'credit' => 0,
+                            'total' => auth()->user()->balance - $product->getPrice(),
+                            'bill_id' => $bill->id,
+                        ]);
+                        //
+                        /**
+                         * @var $branch User
+                         */
+                        $branch = auth()->user()->user?->user;
+                        if (!$product->is_offer && $branch != null && $branch->is_branch) {
+                            $branch_ratio = Setting::first()->branch_ratio * $ratio;
+                            $ratio -= $branch_ratio;
+                            if ($branch_ratio > 0) {
+                                Point::create([
+                                    'credit' => $branch_ratio,
+                                    'user_id' => $branch->id,
+                                    'debit' => 0,
+                                    'info' => 'ربح عن طريق ' . auth()->user()->name,
+                                    'bill_id' => $bill->id,
+                                ]);
+                            }
+
+                        }
+                        if (!$product->is_offer && auth()->user()->user != null) {
+                            Point::create([
+                                'credit' => $ratio,
+                                'user_id' => auth()->user()->user_id,
+                                'debit' => 0,
+                                'info' => 'ربح عن طريق ' . auth()->user()->name,
+                                'bill_id' => $bill->id,
+                            ]);
+                        } elseif (!$product->is_offer && auth()->user()->affiliate_user != null) {
+                            Point::create([
+                                'credit' => $ratio,
+                                'user_id' => auth()->user()->affiliate_id,
+                                'debit' => 0,
+                                'info' => 'ربح عن طريق ' . auth()->user()->name,
+                                'bill_id' => $bill->id,
+                            ]);
+                        }
+
+                        \DB::commit();
+                        return HelperSupport::sendData(['bill' => new BillResource($bill), 'user' => new UserResource(auth()->user())]);
+                    } catch (\Exception | \Error $e) {
+                        \DB::rollBack();
+                        HelperSupport::SendError('خطأ في الطلب', $e->getMessage());
+                    }
+                }
                 elseif ($product->is_active_api) {
                     if ($product->api == 'life-cash') {
                         $service = new LifeCash(getSettingsModel());
