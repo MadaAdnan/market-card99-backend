@@ -24,9 +24,7 @@ class BillRepository
         try {
             $bill->update(['status' => BillStatusEnum::COMPLETE->value, 'data_id' => $other_data]);
             $parent = $bill->user->user;
-            if($bill->user_id==4736){
-                dd($parent);
-            }
+
             $affiliate_user_id = $bill->user->affiliate_id;
             $branch_ratio = 0;
             $branch = $bill->user->user?->user;
