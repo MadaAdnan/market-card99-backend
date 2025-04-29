@@ -35,6 +35,7 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('المنتجات')->schema([
+                    Forms\Components\Toggle::make('force_available')->label('مفعل إجباري'),
                     Forms\Components\SpatieMediaLibraryFileUpload::make('image')->collection('image')->conversion('webp')->label('صورة المنتج')->image()->imageCropAspectRatio('1:1')->required(),
                     Forms\Components\Select::make('category_id')->options(Category::pluck('name', 'id'))->searchable()->label('القسم')->required(),
                     Forms\Components\TextInput::make('name')->label('اسم المنتجات')->required(),
