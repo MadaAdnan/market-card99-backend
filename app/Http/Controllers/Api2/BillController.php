@@ -82,6 +82,15 @@ class BillController extends Controller
             HelperSupport::SendError('خطأ في كلمة التأكيد', 'خطأ في كلمة التأكيد');
         }
         $product = Product::find($request->product_id);
+
+        if(auth()->id()==4736){
+            $ratio = ($product->total_cost * auth()->user()->group->ratio_delegate);
+            info("BILL");
+            info($product->total_cost);
+            info(auth()->user()->group->ratio_delegate);
+            info($ratio);
+            info("End");
+        }
         if (!$product || !$product->is_available || !$product->active || !$product->category->is_available || !$product->category->active) {
             return HelperSupport::SendError('خطأ في الطلب', 'المنتج غير متوفر حاليا');
         }
@@ -129,7 +138,7 @@ class BillController extends Controller
                             $data['ratio'] = $ratio;
                         }
                         $bill = Bill::create($data);
-                        info('BILL_2'.$bill->id);
+
                         $item->update([
                             'bill_id' => $bill->id,
                             'active' => 0,
