@@ -133,7 +133,7 @@ class SettingResource extends Resource
                         return [
                             Forms\Components\TextInput::make('token')->default($token)
                         ];
-                    })->label('توكن أصحاب')
+                    })->label('توكن أصحاب')->action(fn()=>null)
             ])
             ->bulkActions([
                 //Tables\Actions\DeleteBulkAction::make(),
