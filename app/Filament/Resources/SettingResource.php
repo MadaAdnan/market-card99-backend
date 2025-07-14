@@ -129,7 +129,6 @@ class SettingResource extends Resource
                             'email'=>'magd.abomazn@gmail.com',
                             'password'=>'Mm123456789mm$'
                         ]);
-                        dd($res->json());
                         $token=$res->json()['userdata']['api_key'];
                         return [
                             Forms\Components\TextInput::make('token')->default($token)
