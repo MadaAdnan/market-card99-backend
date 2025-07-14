@@ -122,6 +122,19 @@ class SettingResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()->button(),
             ])
+            ->headerActions([
+                Tables\Actions\Action::make('as7ab')
+                    ->form(function(){
+                        $res=\Http::post('https://as7abcard.com/api/v1/login',[
+                            'email'=>'magd.abomazn@gmail.com',
+                            'password'=>'Mm123456789mm$'
+                        ]);
+                        $token=$res->json()['userdata']['api_key'];
+                        return [
+                            Forms\Components\TextInput::make('token')->default($token)
+                        ];
+                    })->label('توكن أصحاب')
+            ])
             ->bulkActions([
                 //Tables\Actions\DeleteBulkAction::make(),
             ]);
