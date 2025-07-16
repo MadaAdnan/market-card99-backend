@@ -348,7 +348,7 @@ class BillController extends Controller
                 $dataBill['customer_username'] = $request->id_user;
             }
             $bill = Bill::create($dataBill);
-info('BILL_@'.$bill->id);
+
             #########################3
             Balance::create([
                 'user_id' => auth()->id(),

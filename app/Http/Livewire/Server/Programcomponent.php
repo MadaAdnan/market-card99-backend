@@ -43,7 +43,7 @@ class Programcomponent extends Component
     public function buy($app_id)
     {
 
-        sleep(1);
+
         try {
 
             if (auth()->check() && auth()->user()->orders()->orderWait()->count() > 9) {

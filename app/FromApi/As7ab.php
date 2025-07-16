@@ -36,7 +36,7 @@ class As7ab implements PayByApi
                 'Content-Type' => 'application/json'
             ])->withBody($data,'application/json')->timeout(120)->post($url);
 
-            sleep(1);
+
             if ($response->successful() && \Str::lower($response->json('result')) == 'success' && isset($response->json()['orderid'])) {
                 $bill->api = $bill->product->api;
                 $bill->api_id = $response->json()['orderid'];
@@ -66,7 +66,7 @@ class As7ab implements PayByApi
             $response = \Http::withToken($token)->withHeaders([
                 'Content-Type' => 'application/json'
             ])->withBody($data,'application/json')->timeout(120)->post($url);
-            sleep(1);
+
             if ($response->successful() && \Str::lower($response->json('result')) === 'success' && isset($response->json()['orderid'])) {
                 $bill->api = $bill->product->api;
                 $bill->api_id = $response->json()['orderid'];

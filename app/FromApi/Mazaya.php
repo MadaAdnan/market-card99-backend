@@ -41,7 +41,7 @@ class Mazaya implements PayByApi
                 'Content-Type' => 'application/json'
             ])->withBody(json_encode($data), 'application/json')->timeout(120)->post($url);
 
-            sleep(1);
+
             if ($response->successful() && isset($response->json()['order'])) {
                 $bill->api = $bill->product->api;
                 $bill->api_id = $response->json()['order']['id'];
@@ -75,7 +75,7 @@ class Mazaya implements PayByApi
                 'Content-Type' => 'application/json'
             ])->timeout(120)->post($url,$data);
 
-            sleep(1);
+
             if ($response->successful() && isset($response->json()['order'])) {
                 $bill->api = $bill->product->api;
                 $bill->api_id = $response->json()['order']['id'];

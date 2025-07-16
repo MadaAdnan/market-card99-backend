@@ -52,7 +52,7 @@ class OrderController extends Controller
         } catch (\Exception | \Error $e) {
             $this->order_count++;
             if ($this->order_count < 3) {
-                sleep(1);
+
                 $this->store($server, $country, $program);
             }
 

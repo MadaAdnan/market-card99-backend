@@ -34,7 +34,7 @@ class SaudCard implements PayByApi
                 'api-token' => $token
             ])->get($url);
 
-            sleep(1);
+
             if ($response->successful() && \Str::lower($response->json('status')) == 'ok' && $response->json('data')['status'] != 'not_available') {
                 $bill->api = $bill->product->api;
                 $bill->api_id = $response->json('data')['order_id'];
@@ -61,7 +61,7 @@ class SaudCard implements PayByApi
             $response = \Http::withHeaders([
                 'api-token' => $token
             ])->get($url);
-            sleep(1);
+
             if (($response->successful() && \Str::lower($response->json('status')) == 'ok') || $response->json('data')['status'] != 'not_available') {
                 $bill->api = $bill->product->api;
                 $bill->api_id = $response->json('data')['order_id'];
