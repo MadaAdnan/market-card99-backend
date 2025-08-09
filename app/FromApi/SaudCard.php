@@ -81,6 +81,7 @@ class SaudCard implements PayByApi
         ])->get($url);
         if ($response->successful() && \Str::lower($response->json('status')) == 'ok') {
             if (isset($response->json('data')[0]['status']) && $response->json('data')[0]['status'] == 'accept') {
+
                 $msg_cancel = '';
                 if (isset($response->json('data')[0]['replay_api'][0])) {
                     $msg_cancel = $response->json('data')[0]['replay_api'][0];

@@ -83,10 +83,20 @@ class BillController extends Controller
         }
         $product = Product::find($request->product_id);
 
-
+$setting=Setting::first();
         if (!$product || !$product->is_available || !$product->active || !$product->category->is_available || !$product->category->active) {
             return HelperSupport::SendError('خطأ في الطلب', 'المنتج غير متوفر حاليا');
         }
+        if($setting->order_same_id==false){
+            $check=Bill::where('product_id',$product->id)
+                ->where('customer_id',$request->id_user)
+                ->orWhere('customer_username',$request->id_user)
+                ->where('status',BillStatusEnum::PENDING->value)->first();
+            if($check){
+                return HelperSupport::SendError('خطأ في الطالب', 'تم طلب هذا المنتج من قبل');
+            }
+        }
+
         try {
             /*
             * Buy Product

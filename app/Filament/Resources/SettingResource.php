@@ -98,7 +98,8 @@ class SettingResource extends Resource
 
                             Forms\Components\Wizard\Step::make('إغلاق الموقع')->schema([
                                 Forms\Components\Toggle::make('is_open')->label('فتح الموقع')->reactive(),
-                                Forms\Components\Textarea::make('msg_close')->label('رسالة إغلاق الموقع')->visible(fn($get) => !$get('is_open'))
+                                Forms\Components\Textarea::make('msg_close')->label('رسالة إغلاق الموقع')->visible(fn($get) => !$get('is_open')),
+                            Forms\Components\Toggle::make('order_same_id')->label(' الطلب لنفس ال ID  مباشرة')->default(false),
                             ])
 
                         ])->skippable(),
