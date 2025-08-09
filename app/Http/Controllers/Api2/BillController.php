@@ -99,7 +99,7 @@ $setting=Setting::first();
 
                     ->where('status',BillStatusEnum::PENDING->value)->first();
                 if($check){
-                     throw new \Exception( 'تم طلب هذا المنتج من قبل');
+                     throw new \Exception( 'لديك طلب بالإنتظار لنفس الرقم يرجى الإنتظار ');
                 }
             }
             /*
